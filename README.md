@@ -12,7 +12,9 @@
 Use "uv add \<package>" to add new dependencies.
 
 ### Repository Structure
-- data/  (Local dataset, not tracked by git)
+- data/  (local dataset, not tracked by git)
+    - raw_data
+    - epoched_data
 - notebooks/  (jupyter notebooks)
 - src/  (reusable Python code)
 - results/ (generated figures, metrics, model outputs)
