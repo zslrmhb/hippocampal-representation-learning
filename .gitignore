@@ -1,0 +1,28 @@
+# Python environment
+.venv/
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+
+# OS / editor
+.DS_Store
+.idea/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Datasets (keep placeholder)
+data/*
+!data/.gitkeep
+
+# Generated outputs
+results/*
+!results/.gitkeep
