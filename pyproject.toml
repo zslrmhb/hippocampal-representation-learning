@@ -1,0 +1,16 @@
+[project]
+name = "hippocampal-representation-learning"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "cebra>=0.4.0",
+    "matplotlib>=3.11.2",
+    "numpy>=1.26.4",
+    "plotly>=7.1.0",
+    "scipy>=1.17.1",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+]
