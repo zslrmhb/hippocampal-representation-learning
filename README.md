@@ -15,6 +15,8 @@ Use "uv add \<package>" to add new dependencies.
 - data/  (local dataset, not tracked by git)
     - raw_data
     - epoched_data
+    - ... (processed data?)
+- docs/ (any related files, literature, not tracked)
 - notebooks/  (jupyter notebooks)
 - src/  (reusable Python code)
 - results/ (generated figures, metrics, model outputs)
