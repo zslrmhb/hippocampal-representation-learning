@@ -26,6 +26,11 @@ class Config:
     left_context: int = 0
     right_context: int = 0
     positive_offset: int = 1
+    profile: str = 'baseline'
+    notch_hz: float = 60.0
+    notch_q: float = 30.0
+    filter_tolerance: float = 1e-6
+    flatline_ms: float = 100.0
 
     def validate(self):
         values = (self.window_ms, self.sample_rate_hz, self.train_fraction,
@@ -48,6 +53,15 @@ class Config:
             raise ValueError('Context must be nonnegative')
         if self.left_context + self.right_context + abs(self.positive_offset) >= round(n):
             raise ValueError('Context and positive offset leave no eligible centers')
+        if self.profile not in ('baseline', 'inseq-decoding'):
+            raise ValueError('Profile must be baseline or inseq-decoding')
+        if self.profile == 'inseq-decoding':
+            if not np.isfinite((self.notch_hz, self.notch_q, self.filter_tolerance, self.flatline_ms)).all():
+                raise ValueError('Filter configuration must be finite')
+            if not 0 < self.notch_hz < self.sample_rate_hz/2 or self.notch_q <= 0:
+                raise ValueError('Notch must be below Nyquist with positive Q')
+            if not 0 < self.filter_tolerance < 1 or self.flatline_ms <= 0:
+                raise ValueError('Filter tolerance must be in (0,1), flatline duration positive')
         return int(round(n))
 
 
@@ -218,7 +232,8 @@ def diagnostics(output, raw, scaled, kept, channel_keys, stats, config, plots):
         for ch in range(min(3, len(channel_keys))):
             axes[0].plot(time, train_raw[0, :, ch], label=str(channel_keys[ch]), lw=.7)
             axes[1].plot(time, scaled[train[0], :, ch], lw=.7)
-        axes[0].set(title='First retained training trial: supplied voltage', ylabel='Stored units')
+        signal = 'notch-filtered voltage' if config.profile == 'inseq-decoding' else 'supplied voltage'
+        axes[0].set(title=f'First retained training trial: {signal}', ylabel='Stored units')
         axes[0].legend()
         axes[1].set(title='Same samples: frozen training scaling', ylabel='Z score', xlabel='Seconds after onset')
         axes[2].semilogy(freq[1:], power[1:])
@@ -241,6 +256,13 @@ def process_session(raw_root, session, output, config, plots=True):
         interval['start_s'] = float(time[interval['start']])
         interval['end_exclusive_s'] = float(time[interval['end']-1]+1/config.sample_rate_hz)
     coverage_summary = coverage(trials, config)
+    decoding = config.profile == 'inseq-decoding'
+    if decoding:
+        for trial in trials:
+            trial.update(filter_block_id=None, filter_source_start=None,
+                         filter_source_end=None, filter_guard_samples=None)
+            if trial['inseq_raw'] != 1:
+                trial['reasons'].append('out_of_sequence')
     candidates = [t for t in trials if not t['reasons']]
     if not candidates:
         raise ValueError(f'No eligible windows for {session}')
@@ -249,6 +271,14 @@ def process_session(raw_root, session, output, config, plots=True):
     for ch, row in enumerate(rows(lfp)):
         for i, trial in enumerate(candidates):
             data[i, :, ch] = row[trial['start']:trial['end']]
+    if decoding:
+        from .filtering import clean_trials, save_notch_qa
+        _, _, raw_stats = quality_and_scale(data, candidates, config)
+        np.savez_compressed(output/'raw_quality.npz', **raw_stats)
+        data, before_notch, candidates, filter_info, blocks, spans, spectrum = clean_trials(
+            lfp, data, candidates, intervals, raw_stats, config)
+        _csv(output/'filter_blocks.csv', blocks)
+        _csv(output/'artifact_spans.csv', spans)
     accepted, scaled, stats = quality_and_scale(data, candidates, config)
     kept = [t for i, t in enumerate(candidates) if accepted[i]]
     for t in trials:
@@ -260,6 +290,20 @@ def process_session(raw_root, session, output, config, plots=True):
     trial_ids = np.array([t['trial_id'] for t in kept], dtype=np.int64)
     splits = np.array([t['split'] for t in kept])
     keys = np.array(lfp_meta['keys'])[stats['channel_mask']]
+    if decoding:
+        shared = dict(X=scaled, trial_ids=trial_ids, split=splits, channel_keys=keys,
+                      raw_indices=raw_indices, timestamps_s=time[raw_indices], sample_valid=mask,
+                      sample_rate_hz=config.sample_rate_hz,
+                      filter_block_ids=np.array([t['filter_block_id'] for t in kept]),
+                      filter_source_start=np.array([t['filter_source_start'] for t in kept]),
+                      filter_source_end=np.array([t['filter_source_end'] for t in kept]))
+        for target, names in (('odor', list('ABCDE')), ('position', ['1', '2', '3', '4', '5'])):
+            np.savez_compressed(output/f'{target}_decoding.npz', **shared,
+                                y=np.array([t[target] for t in kept], dtype=np.int64),
+                                target_name=target, class_names=np.array(names))
+        save_notch_qa(output, before_notch[accepted][:, :, stats['channel_mask']],
+                      data[accepted][:, :, stats['channel_mask']], kept, keys,
+                      stats['channel_mask'], filter_info, spectrum, config, plots)
     np.savez_compressed(output/'odor_trials.npz', lfp=scaled, sample_valid=mask,
                         valid_centers=centers, valid_pair_centers=pair_centers,
                         raw_indices=raw_indices, timestamps_s=time[raw_indices],
@@ -302,14 +346,22 @@ def process_session(raw_root, session, output, config, plots=True):
                    scaling_unique_samples=len(stats['scaling_fit_raw_indices']),
                    segments=segments, timestamp_gaps=[dict(after_raw_index=b-1, from_s=float(time[b-1]), to_s=float(time[b]), jump_s=float(time[b]-time[b-1])) for _, b in segments[:-1]], split_intervals=intervals,
                    sources=dict(lfp=lfp_meta, behavior=bvr_meta), config=asdict(config),
-                   line_noise_diagnostic='58-62 Hz mean power / mean 52-56 and 64-68 Hz power; no notch',
+                   line_noise_diagnostic=('58-62 Hz / neighboring power after notch; see notch_quality.json for paired cleaning QA'
+                                          if decoding else '58-62 Hz mean power / mean 52-56 and 64-68 Hz power; no notch'),
                    channel_quality=quality)
-    _json(output/'preprocessing_config.json', dict(schema_version=1, **asdict(config),
+    if decoding:
+        summary.update(filter=filter_info,
+                       target_arrays_identical=all(t['odor'] == t['position'] for t in kept),
+                       raw_inseq_onsets=sum(t['inseq_raw'] == 1 for t in trials),
+                       datasets=['odor_decoding.npz', 'position_decoding.npz'])
+    _json(output/'preprocessing_config.json', dict(schema_version=2 if decoding else 1, **asdict(config),
         window_policy='fixed [odor onset, onset+window); exclude early withdrawals',
         split_policy='contiguous raw sample index blocks; purge crossing windows; no verified sequence groups',
         quality_policy='unique candidate TRAIN samples; median/MAD (SD fallback); reject whole trial on any retained-channel nonfinite/amplitude/jump violation',
         scaling_policy='unique retained TRAIN samples, population mean/SD',
-        signal_processing='no filtering, rereferencing, resampling or imputation',
+        signal_processing=('60 Hz notch by default, forward-backward; independent split-owned artifact-free blocks; no rereferencing/resampling/imputation'
+                           if decoding else 'no filtering, rereferencing, resampling or imputation'),
+        filter=filter_info if decoding else None,
         context_contract_selected=bool(config.left_context or config.right_context),
         odor_offset='unknown', units='unknown supplied voltage units', acquisition_filter='unknown',
         acquisition_reference='unknown'))
@@ -330,6 +382,30 @@ def process_session(raw_root, session, output, config, plots=True):
         'The window is a sampling proxy. Fixed-window exclusions can alter behavior/class balance. '
         'Residual 60 Hz peaks are preserved; consult channel_quality.json and the PSD before selecting a shared optional notch branch. '
         'Zero context is a placeholder until an encoder is selected. This export is not a fitted CEBRA model or adapter.\n')
+    if decoding:
+        (output/'preprocessing_qa.md').write_text(
+            f'# {session} InSeq decoding preprocessing QA\n\n'
+            f'{summary["raw_inseq_onsets"]} raw InSeq onsets; {len(kept)} retained; '
+            f'{len(keys)}/{len(lfp_meta["keys"])} channels. Exclusions: `{dict(exclusions)}`.\n\n'
+            'odor_decoding.npz and position_decoding.npz contain exactly the same X and shared metadata; '
+            'y names odor identity versus ordinal sequence position. Labels are stored 0–4. '
+            f'Encoded targets identical: {summary["target_arrays_identical"]}. '
+            'Fixed-sequence InSeq decoding cannot separate odor-specific from position-specific coding.\n\n'
+            f'Notch {config.notch_hz} Hz, Q={config.notch_q}, forward-backward at {config.sample_rate_hz} Hz. '
+            f'Guard {filter_info["guard_samples"]} samples at every independent filter-block edge. '
+            'Raw thresholds fit candidate InSeq training windows; all filtering context is screened with those frozen rules. '
+            'Final quality/scaling fit unique eligible filtered InSeq training samples. '
+            'raw_quality.npz and scaling.npz retain their separate fit support.\n\n'
+            'Filter source support is the entire block recorded per trial and in filter_blocks.csv. '
+            'Processing never crosses split boundaries, timestamp gaps or detected context artifacts. '
+            'Neighboring pre-onset/post-withdrawal/OutSeq activity can contribute within the same block: '
+            'this is offline context-supported decoding, not strictly odor-only or pre-decision input. '
+            'The pole-envelope guard tolerance is not a claim of exact finite IIR support.\n\n'
+            'notch_training_psd.npz and notch_quality.png compare identical continuous TRAIN support in original units; '
+            'training_psd.npz describes final retained filtered training clips. '
+            'notch_response.npz gives single-pass and effective forward-backward magnitude responses. '
+            'No automatic harmonic notches, broad bandpass or downsampling. '
+            'Odor offset, acquisition filtering/reference and physical units remain unknown.\n')
     return summary
 
 

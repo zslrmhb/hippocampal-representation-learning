@@ -22,6 +22,17 @@ Use "uv add \<package>" to add new dependencies.
 - results/ (generated figures, metrics, model outputs)
 ## Raw LFP preprocessing
 
+For the InSeq odor and sequence-position tasks, generate two datasets per rat with exactly the same cleaned `X` and shared trial/split metadata, and different target definitions:
+
+```sh
+MPLCONFIGDIR=/private/tmp/capstone-matplotlib PYTHONPATH=src python3 -m hippocampal_preprocessing \
+  --profile inseq-decoding --output data/processed/my-inseq-decoding-run
+```
+
+This mode applies a 60 Hz notch within independent split-owned, artifact-free recording blocks, extracts fixed 0–500 ms windows, and fits channel scaling on retained InSeq training data. It exports `odor_decoding.npz` and `position_decoding.npz` per rat. See [the InSeq dataset contract](docs/inseq-decoding.md) for loading, filter QA and temporal-support limits. On the fixed InSeq sequence, odor and position labels coincide; the two exports do not disentangle the underlying codes.
+
+The original unfiltered baseline remains available:
+
 Reconstruct chronological odor trials directly from raw behavior and LFP, with protected train/validation/test blocks, training-only quality rules and scaling, and separate neural/label exports:
 
 ```sh

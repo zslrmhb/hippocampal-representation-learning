@@ -1,5 +1,7 @@
 # Raw LFP preprocessing
 
+The original baseline is documented below. For the newer InSeq-only datasets with shared notch-cleaned X and separate odor/sequence-position targets, use `--profile inseq-decoding`; see [InSeq decoding datasets](inseq-decoding.md).
+
 This pipeline prepares matched inputs for direct-voltage odor decoding and a future self-supervised representation comparison. It reads only `<session>_lfp.npz` and `<session>_bvr.npz` from the raw recording directory. It does not read the supplied epochs, external alignment tables, spikes, or research notes, and does not fit a model.
 
 From the repository root:
