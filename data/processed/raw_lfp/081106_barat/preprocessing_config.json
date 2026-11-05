@@ -1,0 +1,19 @@
+{
+  "window_ms": 500.0,
+  "sample_rate_hz": 1000.0,
+  "train_fraction": 0.7,
+  "validation_fraction": 0.15,
+  "artifact_z": 20.0,
+  "left_context": 0,
+  "right_context": 0,
+  "positive_offset": 1,
+  "profile": "inseq-decoding",
+  "notch_hz": 60.0,
+  "notch_q": 30.0,
+  "filter_tolerance": 1e-06,
+  "flatline_ms": 100.0,
+  "window_policy": "fixed [odor onset, onset+window); exclude early withdrawals",
+  "split_policy": "contiguous raw sample index blocks; purge crossing windows; no verified sequence groups",
+  "scaling_policy": "unique retained TRAIN samples, population mean/SD",
+  "signal_processing": "60 Hz notch, forward-backward, per clean block"
+}

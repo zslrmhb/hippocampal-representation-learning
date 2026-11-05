@@ -1,0 +1,641 @@
+{
+  "session": "090212_superchris",
+  "raw_onsets": 240,
+  "retained": 187,
+  "coverage_ms": {
+    "train": {
+      "300": 178,
+      "500": 177,
+      "all_onsets": 178
+    },
+    "validation": {
+      "300": 38,
+      "500": 36,
+      "all_onsets": 38
+    },
+    "test": {
+      "300": 24,
+      "500": 23,
+      "all_onsets": 24
+    }
+  },
+  "before": {
+    "odor": {
+      "0": 61,
+      "1": 53,
+      "2": 44,
+      "3": 43,
+      "4": 39
+    },
+    "position": {
+      "0": 56,
+      "1": 57,
+      "2": 47,
+      "3": 43,
+      "4": 37
+    },
+    "inseq": {
+      "0": 30,
+      "1": 210
+    },
+    "correct": {
+      "0": 24,
+      "1": 216
+    },
+    "split": {
+      "test": 24,
+      "train": 178,
+      "validation": 38
+    }
+  },
+  "after": {
+    "odor": {
+      "0": 55,
+      "1": 44,
+      "2": 34,
+      "3": 30,
+      "4": 24
+    },
+    "position": {
+      "0": 55,
+      "1": 44,
+      "2": 34,
+      "3": 30,
+      "4": 24
+    },
+    "inseq": {
+      "1": 187
+    },
+    "correct": {
+      "0": 18,
+      "1": 169
+    },
+    "split": {
+      "test": 18,
+      "train": 138,
+      "validation": 31
+    }
+  },
+  "by_split": {
+    "train": {
+      "odor": {
+        "0": 42,
+        "1": 34,
+        "2": 24,
+        "3": 23,
+        "4": 15
+      },
+      "position": {
+        "0": 42,
+        "1": 34,
+        "2": 24,
+        "3": 23,
+        "4": 15
+      },
+      "inseq": {
+        "1": 138
+      },
+      "correct": {
+        "0": 14,
+        "1": 124
+      },
+      "split": {
+        "train": 138
+      }
+    },
+    "validation": {
+      "odor": {
+        "0": 8,
+        "1": 7,
+        "2": 6,
+        "3": 5,
+        "4": 5
+      },
+      "position": {
+        "0": 8,
+        "1": 7,
+        "2": 6,
+        "3": 5,
+        "4": 5
+      },
+      "inseq": {
+        "1": 31
+      },
+      "correct": {
+        "0": 3,
+        "1": 28
+      },
+      "split": {
+        "validation": 31
+      }
+    },
+    "test": {
+      "odor": {
+        "0": 5,
+        "1": 3,
+        "2": 4,
+        "3": 2,
+        "4": 4
+      },
+      "position": {
+        "0": 5,
+        "1": 3,
+        "2": 4,
+        "3": 2,
+        "4": 4
+      },
+      "inseq": {
+        "1": 18
+      },
+      "correct": {
+        "0": 1,
+        "1": 17
+      },
+      "split": {
+        "test": 18
+      }
+    }
+  },
+  "exclusions": {
+    "amplitude_artifact": 2,
+    "filter_edge": 21,
+    "out_of_sequence": 30,
+    "early_withdrawal": 4
+  },
+  "poke_anomalies": [],
+  "channels_total": 21,
+  "channels_kept": 21,
+  "dropped_channel_keys": [],
+  "artifact_candidate_train_rejections": {
+    "10.0": 3,
+    "15.0": 1,
+    "20.0": 0
+  },
+  "threshold_unique_samples": 69000,
+  "scaling_unique_samples": 69000,
+  "segments": [
+    [
+      0,
+      3066001
+    ]
+  ],
+  "split_intervals": [
+    {
+      "split": "train",
+      "segment": 0,
+      "start": 0,
+      "end": 2146200,
+      "start_s": 0.001075,
+      "end_exclusive_s": 2146.2010750000004
+    },
+    {
+      "split": "validation",
+      "segment": 0,
+      "start": 2146200,
+      "end": 2606100,
+      "start_s": 2146.201075,
+      "end_exclusive_s": 2606.1010750000005
+    },
+    {
+      "split": "test",
+      "segment": 0,
+      "start": 2606100,
+      "end": 3066001,
+      "start_s": 2606.101075,
+      "end_exclusive_s": 3066.0020750000003
+    }
+  ],
+  "sources": {
+    "lfp": {
+      "path": "/Users/anthonyko/UCI Capstone/hippocampal-representation-learning/data/raw_data/090212_superchris/090212_superchris_lfp.npz",
+      "shape": [
+        21,
+        3066001
+      ],
+      "dtype": "float64",
+      "keys": [
+        "T1_LFP_Raw",
+        "T2_LFP_Raw",
+        "T3_LFP_Raw",
+        "T4_LFP_Raw",
+        "T5_LFP_Raw",
+        "T6_LFP_Raw",
+        "T7_LFP_Raw",
+        "T8_LFP_Raw",
+        "T9_LFP_Raw",
+        "T10_LFP_Raw",
+        "T12_LFP_Raw",
+        "T13_LFP_Raw",
+        "T14_LFP_Raw",
+        "T15_LFP_Raw",
+        "T16_LFP_Raw",
+        "T18_LFP_Raw",
+        "T19_LFP_Raw",
+        "T20_LFP_Raw",
+        "T21_LFP_Raw",
+        "T22_LFP_Raw",
+        "T23_LFP_Raw"
+      ],
+      "size_bytes": 123146809
+    },
+    "behavior": {
+      "path": "/Users/anthonyko/UCI Capstone/hippocampal-representation-learning/data/raw_data/090212_superchris/090212_superchris_bvr.npz",
+      "shape": [
+        18,
+        3066001
+      ],
+      "dtype": "float64",
+      "keys": [
+        "TimeBin",
+        "Odor1",
+        "Odor2",
+        "Odor3",
+        "Odor4",
+        "Odor5",
+        "Position1",
+        "Position2",
+        "Position3",
+        "Position4",
+        "Position5",
+        "InSeqLog",
+        "PerformanceLog",
+        "PokeEvents",
+        "FrontReward",
+        "BackReward",
+        "XvalRatMazePosition",
+        "YvalRatMazePosition"
+      ],
+      "size_bytes": 7942233
+    }
+  },
+  "config": {
+    "window_ms": 500.0,
+    "sample_rate_hz": 1000.0,
+    "train_fraction": 0.7,
+    "validation_fraction": 0.15,
+    "artifact_z": 20.0,
+    "left_context": 0,
+    "right_context": 0,
+    "positive_offset": 1,
+    "profile": "inseq-decoding",
+    "notch_hz": 60.0,
+    "notch_q": 30.0,
+    "filter_tolerance": 1e-06,
+    "flatline_ms": 100.0
+  },
+  "channel_quality": [
+    {
+      "channel": "T1_LFP_Raw",
+      "training_min": -1.0923747092173237,
+      "training_max": 0.37342419038343694,
+      "training_sd": 0.09529619359557967,
+      "line_60hz_to_neighbor_power": 0.6374119721551391,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T2_LFP_Raw",
+      "training_min": -1.1054634196001276,
+      "training_max": 0.4151725700308386,
+      "training_sd": 0.10012210627970038,
+      "line_60hz_to_neighbor_power": 0.6321338529373569,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T3_LFP_Raw",
+      "training_min": -1.1291387611598658,
+      "training_max": 0.5061911313164259,
+      "training_sd": 0.11838746000035945,
+      "line_60hz_to_neighbor_power": 0.5815558895419403,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T4_LFP_Raw",
+      "training_min": -1.103618366303939,
+      "training_max": 0.43309578089124307,
+      "training_sd": 0.10924034032264199,
+      "line_60hz_to_neighbor_power": 0.6120195958504847,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T5_LFP_Raw",
+      "training_min": -1.1757987159335024,
+      "training_max": 0.6822912330447197,
+      "training_sd": 0.1507628172934685,
+      "line_60hz_to_neighbor_power": 0.5085364832175324,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T6_LFP_Raw",
+      "training_min": -0.8102107476054433,
+      "training_max": 0.5171196479326139,
+      "training_sd": 0.13187381482915472,
+      "line_60hz_to_neighbor_power": 0.4470415248115384,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T7_LFP_Raw",
+      "training_min": -0.9368213481996883,
+      "training_max": 0.5734795342865231,
+      "training_sd": 0.13584241365094016,
+      "line_60hz_to_neighbor_power": 0.4553942440547623,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T8_LFP_Raw",
+      "training_min": -0.86138134353625,
+      "training_max": 0.655684804759825,
+      "training_sd": 0.14529442389109926,
+      "line_60hz_to_neighbor_power": 0.4282843090226002,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T9_LFP_Raw",
+      "training_min": -0.8364554186094095,
+      "training_max": 0.5606631521790765,
+      "training_sd": 0.1395649340155843,
+      "line_60hz_to_neighbor_power": 0.4437557153244123,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T10_LFP_Raw",
+      "training_min": -0.9189852745265509,
+      "training_max": 0.49697323445479596,
+      "training_sd": 0.12424186650306503,
+      "line_60hz_to_neighbor_power": 0.44658759205294807,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T12_LFP_Raw",
+      "training_min": -1.1506408524890577,
+      "training_max": 0.8024898577245775,
+      "training_sd": 0.18283823577571678,
+      "line_60hz_to_neighbor_power": 0.4650683027711825,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T13_LFP_Raw",
+      "training_min": -1.1893485901027103,
+      "training_max": 1.307225950505022,
+      "training_sd": 0.2923154101476792,
+      "line_60hz_to_neighbor_power": 0.4504569651079301,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T14_LFP_Raw",
+      "training_min": -1.1907697083378808,
+      "training_max": 1.3548860421810194,
+      "training_sd": 0.29459763873605843,
+      "line_60hz_to_neighbor_power": 0.4486225557034271,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T15_LFP_Raw",
+      "training_min": -1.1333087508171598,
+      "training_max": 0.6656784561381267,
+      "training_sd": 0.1501878527608463,
+      "line_60hz_to_neighbor_power": 0.47242769354329917,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T16_LFP_Raw",
+      "training_min": -1.2808783770673275,
+      "training_max": 1.722756987087419,
+      "training_sd": 0.3535822811607308,
+      "line_60hz_to_neighbor_power": 0.449925607034021,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T18_LFP_Raw",
+      "training_min": -1.2285827020955216,
+      "training_max": 0.6127090865317454,
+      "training_sd": 0.21252360974218842,
+      "line_60hz_to_neighbor_power": 0.5056082979790733,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T19_LFP_Raw",
+      "training_min": -1.2579543410885847,
+      "training_max": 1.4906540911708501,
+      "training_sd": 0.31107401200664453,
+      "line_60hz_to_neighbor_power": 0.441131485363952,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T20_LFP_Raw",
+      "training_min": -1.089864613679426,
+      "training_max": 1.0904265234544546,
+      "training_sd": 0.24040542304290027,
+      "line_60hz_to_neighbor_power": 0.46304076965508656,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T21_LFP_Raw",
+      "training_min": -1.3415545533008182,
+      "training_max": 1.7397746051963812,
+      "training_sd": 0.36163798685073906,
+      "line_60hz_to_neighbor_power": 0.43754912074436103,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T22_LFP_Raw",
+      "training_min": -1.2977929170905576,
+      "training_max": 1.6880893087284083,
+      "training_sd": 0.3449612729315801,
+      "line_60hz_to_neighbor_power": 0.4395941697482051,
+      "line_noise_status": "available"
+    },
+    {
+      "channel": "T23_LFP_Raw",
+      "training_min": -1.3137532498058215,
+      "training_max": 1.6229390710360456,
+      "training_sd": 0.3619346513021744,
+      "line_60hz_to_neighbor_power": 0.4445906709671693,
+      "line_noise_status": "available"
+    }
+  ],
+  "filter": {
+    "frequency_hz": 60.0,
+    "q": 30.0,
+    "b": [
+      0.9937559649536571,
+      -1.8479418578501994,
+      0.9937559649536571
+    ],
+    "a": [
+      1.0,
+      -1.8479418578501994,
+      0.9875119299073143
+    ],
+    "single_pass_bandwidth_hz": 2.0,
+    "max_pole_radius": 0.993736348287268,
+    "guard_samples": 2199,
+    "guard_ms": 2199.0,
+    "pole_envelope_tolerance": 1e-06,
+    "direction": "forward-backward (zero phase); squared single-pass magnitude",
+    "padding": "odd reflection, guard_samples per edge",
+    "support": "entire independently filtered block, not just the trial window",
+    "interpretation": "offline context-supported; not strictly odor-only or causal",
+    "raw_context_artifact_channel_sample_counts": {
+      "nonfinite": 0,
+      "amplitude": 4312,
+      "jump": 337,
+      "flatline": 0
+    },
+    "invalid_context_samples": 1419,
+    "flatline_ms": 100.0,
+    "psd_source": "guarded continuous TRAIN blocks; before/after same source support",
+    "psd_nperseg": 4000,
+    "psd_window_count": 969,
+    "channels": [
+      {
+        "channel": "T1_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0006572223936367247,
+        "after_power": 3.6248422806993717e-08,
+        "attenuation_db": -42.58423237919756
+      },
+      {
+        "channel": "T2_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0006586968557337883,
+        "after_power": 3.669134417066594e-08,
+        "attenuation_db": -42.541219681293335
+      },
+      {
+        "channel": "T3_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.00066558719493476,
+        "after_power": 4.1323752837773633e-08,
+        "attenuation_db": -42.07005202765984
+      },
+      {
+        "channel": "T4_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0006577197223156869,
+        "after_power": 3.8760822652486025e-08,
+        "attenuation_db": -42.29647878902206
+      },
+      {
+        "channel": "T5_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0006733057168891013,
+        "after_power": 5.656473484672251e-08,
+        "attenuation_db": -40.75666546317475
+      },
+      {
+        "channel": "T6_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0007045563789187459,
+        "after_power": 4.7595780258829056e-08,
+        "attenuation_db": -41.70347300478568
+      },
+      {
+        "channel": "T7_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0007083079744723851,
+        "after_power": 4.936828146515675e-08,
+        "attenuation_db": -41.567741218502796
+      },
+      {
+        "channel": "T8_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0007091792861380128,
+        "after_power": 5.549846073474949e-08,
+        "attenuation_db": -41.06475104135544
+      },
+      {
+        "channel": "T9_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0007073722607971497,
+        "after_power": 5.088083155747246e-08,
+        "attenuation_db": -41.43093824724477
+      },
+      {
+        "channel": "T10_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0006955105923761962,
+        "after_power": 4.466466930531541e-08,
+        "attenuation_db": -41.923396256822514
+      },
+      {
+        "channel": "T12_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0007805956024938169,
+        "after_power": 1.7087677127240325e-07,
+        "attenuation_db": -36.59743070938767
+      },
+      {
+        "channel": "T13_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0009094900423470984,
+        "after_power": 3.395847769506745e-07,
+        "attenuation_db": -34.27849735231653
+      },
+      {
+        "channel": "T14_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0009276722747676834,
+        "after_power": 3.4502843633533447e-07,
+        "attenuation_db": -34.29539687127114
+      },
+      {
+        "channel": "T15_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0007323400703547462,
+        "after_power": 1.1088216281192747e-07,
+        "attenuation_db": -38.19851108946679
+      },
+      {
+        "channel": "T16_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0010494740998091587,
+        "after_power": 4.820086003462952e-07,
+        "attenuation_db": -33.37916937701864
+      },
+      {
+        "channel": "T18_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.000832396664042658,
+        "after_power": 8.132746407848288e-08,
+        "attenuation_db": -40.10093100532529
+      },
+      {
+        "channel": "T19_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0010019419659431687,
+        "after_power": 4.3074374261837135e-07,
+        "attenuation_db": -33.66623590036315
+      },
+      {
+        "channel": "T20_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0008285714505413731,
+        "after_power": 2.3776674549165934e-07,
+        "attenuation_db": -35.42178851784818
+      },
+      {
+        "channel": "T21_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0010358981710453861,
+        "after_power": 4.876568231882716e-07,
+        "attenuation_db": -33.27202761142548
+      },
+      {
+        "channel": "T22_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0010109618248766842,
+        "after_power": 4.596266507010708e-07,
+        "attenuation_db": -33.42329553820466
+      },
+      {
+        "channel": "T23_LFP_Raw",
+        "measured_frequency_hz": 60.0,
+        "before_power": 0.0010428887741475478,
+        "after_power": 4.89660344921862e-07,
+        "attenuation_db": -33.283430584936895
+      }
+    ]
+  },
+  "target_arrays_identical": true,
+  "raw_inseq_onsets": 210
+}
