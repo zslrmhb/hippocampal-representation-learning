@@ -1,0 +1,21 @@
+{
+  "params": {
+    "model_architecture": "offset10-model",
+    "output_dimension": 8,
+    "conditional": "time",
+    "time_offsets": 10,
+    "distance": "cosine",
+    "temperature": 1.0,
+    "batch_size": 512,
+    "learning_rate": 0.0003,
+    "max_iterations": 1000,
+    "device": "cpu",
+    "verbose": false
+  },
+  "seed": 42,
+  "cebra_version": "0.6.1",
+  "torch_version": "2.14.1",
+  "fit_split": "train",
+  "fit_trials": 167,
+  "final_loss": 5.595796585083008
+}
