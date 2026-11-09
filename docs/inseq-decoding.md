@@ -1,8 +1,8 @@
-# InSeq odor and sequence-position datasets
+# Odor and sequence-position datasets
 
 Use the same cleaned LFP input for two target definitions. Each rat gets two separate files: `odor_decoding.npz` and `position_decoding.npz`. Their `X`, trial IDs, splits, channels, timestamps, validity masks and filter source metadata are exactly equal. Only `y`, `target_name` and `class_names` represent different targets. Odor is A–E; position is ordinal sequence position 1–5, not physical X/Y location. Both targets are encoded 0–4.
 
-In this fixed InSeq sequence, odor and position are paired one-to-one. The observed targets can therefore be numerically identical. These are separate dataset packages, not independent evidence for odor versus position coding. Keep the real labels; do not modify them to create a difference.
+In this fixed InSeq sequence, odor and position are paired one-to-one, so the targets can be numerically identical. OutSeq trials can supply different odor and position codes in the two exports.
 
 ## Run
 
@@ -21,6 +21,16 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 
 The original `--profile baseline` remains the default and keeps the unfiltered all-status behavior. Both modes use raw LFP/behavior, preserve original data, refuse existing/protected output paths, and publish a complete run atomically. No model training occurs. Existing `raw-lfp-v2` outputs are preserved.
 
+The decoding profile selects InSeq trials by default. To include both InSeq and OutSeq in the same run, add `--include-outseq`:
+
+```sh
+PYTHONPATH=src python3 -m hippocampal_preprocessing \
+  --profile inseq-decoding --include-outseq \
+  --output data/processed/inseq-and-outseq-decoding
+```
+
+Both types must pass the same window, withdrawal, and quality checks. The run config records the selection, and `preprocessing_qa.md` reports the retained count by trial type. Use the aligned `inseq` field in `labels.npz` to identify InSeq (`1`) and OutSeq (`0`) trials. `--include-outseq` can be combined with the window flags below.
+
 Set the inclusive start and exclusive end in milliseconds after odor onset to choose a window for both datasets. For example, `[100, 400)` selects 300 samples per channel at 1000 Hz:
 
 ```sh
@@ -33,13 +43,13 @@ The default is `[0, 500)` ms. Both endpoints must align with the sampling grid. 
 
 ## Shared preprocessing
 
-1. Reconstruct chronological trials and labels directly from raw behavior. Select InSeq (`InSeqLog == +1`), including incorrect InSeq trials; all raw onsets and exclusions stay in the manifest.
+1. Reconstruct chronological trials and labels directly from raw behavior. Select InSeq (`InSeqLog == +1`) and, with `--include-outseq`, OutSeq (`InSeqLog == -1`). Both correct and incorrect trials are eligible. The manifest records all raw onsets and exclusions.
 2. Partition the source timeline per rat: 70% train, 15% validation, 15% test by raw sample index, intersected with timestamp segments. These are source blocks, not verified whole-sequence groups or guaranteed class-balanced trial fractions.
-3. Fit raw quality thresholds on unique eligible InSeq training-window samples. The existing median/MAD screen (SD fallback, default multiplier 20) removes training-constant channels and rejects trials with retained-channel nonfinite/amplitude/jump violations. These are screening heuristics, not hardware-rail clipping detection or a complete physiological artifact detector.
+3. Fit raw quality thresholds on unique eligible training-window samples from the selected trial types. The existing median/MAD screen (SD fallback, default multiplier 20) removes training-constant channels and rejects trials with retained-channel nonfinite/amplitude/jump violations. These are screening heuristics, not hardware-rail clipping detection or a complete physiological artifact detector.
 4. Screen all continuous filter context with those frozen raw thresholds. Exclude nonfinite/amplitude samples, both samples adjoining detected jumps, and exact local flatlines lasting at least 100 ms. Use the union across retained channels to form independent clean blocks. Differences and flatlines never bridge gaps or split boundaries. There is no interpolation/imputation.
 5. Filter each block with a second-order 60 Hz IIR notch, Q=30, at the verified 1000 Hz sampling rate. Apply it forward/backward using second-order sections and odd-reflection padding. The single-pass -3 dB bandwidth is 2 Hz; the effective forward/backward response is squared and has different attenuation bandwidth. Save both responses. No automatic harmonic notches, broad bandpass, rereferencing or downsampling are applied.
 6. Guard every block edge using `ceil(log(tolerance)/log(max_pole_radius))`, with a minimum of nine samples and default tolerance 1e-6. The default guard is 2199 samples (2199 ms) per edge. Padding uses the same number of samples. This is a relative pole-envelope decay criterion, not an absolute voltage-error guarantee. Synthetic impulse and boundary-sensitivity tests check the implementation.
-7. Retain the selected odor-aligned windows (default `[0, 500)` ms) only if they fit inside a guarded block and the verified poke interval. Refit quality rules on eligible filtered InSeq training windows, then compute final per-channel population mean/SD on unique retained training source samples. Freeze those statistics for held-out data and both target exports. A raw-stage removed channel stays removed.
+7. Retain the selected odor-aligned windows (default `[0, 500)` ms) only if they fit inside a guarded block and the verified poke interval. Refit quality rules on eligible filtered training windows, then compute final per-channel population mean/SD on unique retained training source samples. Freeze those statistics for held-out data and both target exports. A raw-stage removed channel stays removed.
 
 `--notch-hz`, `--notch-q`, `--filter-tolerance` and `--flatline-ms` expose these settings alongside the original window, quality, split and context options. Freeze filter choices using training evidence; do not choose them from final test accuracy. There is no automatic claim that 60 Hz cleaning removes every electrical artifact. Genuine neural activity near 60 Hz is attenuated too.
 

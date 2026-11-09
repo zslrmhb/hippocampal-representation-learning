@@ -22,14 +22,14 @@ Use "uv add \<package>" to add new dependencies.
 - results/ (generated figures, metrics, model outputs)
 ## Raw LFP preprocessing
 
-For the InSeq odor and sequence-position tasks, generate two datasets per rat with exactly the same cleaned `X` and shared trial/split metadata, and different target definitions:
+For odor and sequence-position decoding, generate two datasets per rat with exactly the same cleaned `X` and shared trial/split metadata, and different target definitions:
 
 ```sh
 MPLCONFIGDIR=/private/tmp/capstone-matplotlib PYTHONPATH=src python3 -m hippocampal_preprocessing \
   --profile inseq-decoding --output data/processed/my-inseq-decoding-run
 ```
 
-This mode applies a 60 Hz notch within independent split-owned, artifact-free recording blocks and fits channel scaling on retained InSeq training data. It exports `odor_decoding.npz` and `position_decoding.npz` per rat. The default window is 0–500 ms after odor onset. For a different range, add flags such as `--window-start-ms 100 --window-end-ms 400`. See [the InSeq dataset contract](docs/inseq-decoding.md) for loading, filter QA and temporal-support limits.
+This mode applies a 60 Hz notch within independent split-owned, artifact-free recording blocks and fits channel scaling on retained training data. It exports `odor_decoding.npz` and `position_decoding.npz` per rat. The default selects InSeq trials in the 0–500 ms window after odor onset. Add `--include-outseq` to include eligible OutSeq trials alongside InSeq. For a different range, add flags such as `--window-start-ms 100 --window-end-ms 400`. See [the decoding dataset contract](docs/inseq-decoding.md) for loading, filter QA and temporal-support limits.
 
 The original unfiltered baseline remains available:
 

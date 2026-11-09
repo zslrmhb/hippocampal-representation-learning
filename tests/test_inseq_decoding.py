@@ -18,6 +18,7 @@ def decoding_fixture(root, gap=False, artifacts=False):
     onsets = (4000, 11000, 20000, 35000, 44000, 60000, 72000, 76000)
     time, events = event_fixture(n=80000, onsets=onsets)
     events['InSeqLog'] = {onset: -1 if i == 1 else 1 for i, onset in enumerate(onsets)}
+    events['Position3'][onsets[1]] = events['Position2'].pop(onsets[1])
     if gap:
         time[32000:] += 10
     keys = ['TimeBin']+list(events)
@@ -73,6 +74,26 @@ class NotchTests(unittest.TestCase):
 
 
 class InSeqExportTests(unittest.TestCase):
+    def test_include_outseq_retains_mismatched_targets_with_shared_inputs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root, output = Path(tmp)/'raw_data', Path(tmp)/'processed'
+            session, _ = decoding_fixture(root)
+            config = Config(profile='inseq-decoding', include_outseq=True)
+            summary = run(root, output, [session], config, plots=False)[0]
+            folder = output/session
+            with (np.load(folder/'odor_decoding.npz') as odor,
+                  np.load(folder/'position_decoding.npz') as position,
+                  np.load(folder/'labels.npz') as labels):
+                for key in ('X', 'trial_ids', 'raw_indices', 'split'):
+                    np.testing.assert_array_equal(odor[key], position[key])
+                np.testing.assert_array_equal(odor['trial_ids'], labels['trial_ids'])
+                outseq = labels['inseq'] == 0
+                np.testing.assert_array_equal(odor['trial_ids'][outseq], [1])
+                np.testing.assert_array_equal(odor['y'][outseq], [1])
+                np.testing.assert_array_equal(position['y'][outseq], [2])
+            self.assertEqual(summary['after']['inseq'], {'0': 1, '1': 7})
+            self.assertFalse(summary['target_arrays_identical'])
+
     def test_shared_x_real_targets_scaling_and_full_filter_support(self):
         with tempfile.TemporaryDirectory() as tmp:
             root, output = Path(tmp)/'raw_data', Path(tmp)/'processed'

@@ -32,6 +32,7 @@ class Config:
     filter_tolerance: float = 1e-6
     flatline_ms: float = 100.0
     window_start_ms: float = 0.0
+    include_outseq: bool = False
 
     def validate(self):
         values = (self.window_ms, self.sample_rate_hz, self.train_fraction,
@@ -62,6 +63,8 @@ class Config:
             raise ValueError('Context and positive offset leave no eligible centers')
         if self.profile not in ('baseline', 'inseq-decoding'):
             raise ValueError('Profile must be baseline or inseq-decoding')
+        if self.include_outseq and self.profile != 'inseq-decoding':
+            raise ValueError('--include-outseq applies to inseq-decoding. Baseline already includes both trial types.')
         if self.profile == 'inseq-decoding':
             if not np.isfinite((self.notch_hz, self.notch_q, self.filter_tolerance, self.flatline_ms)).all():
                 raise ValueError('Filter configuration must be finite')
@@ -274,7 +277,7 @@ def process_session(raw_root, session, output, config, plots=True):
         for trial in trials:
             trial.update(filter_block_id=None, filter_source_start=None,
                          filter_source_end=None, filter_guard_samples=None)
-            if trial['inseq_raw'] != 1:
+            if not config.include_outseq and trial['inseq_raw'] != 1:
                 trial['reasons'].append('out_of_sequence')
     candidates = [t for t in trials if not t['reasons']]
     if not candidates:
@@ -366,6 +369,7 @@ def process_session(raw_root, session, output, config, plots=True):
         summary.update(filter=filter_info,
                        target_arrays_identical=all(t['odor'] == t['position'] for t in kept),
                        raw_inseq_onsets=sum(t['inseq_raw'] == 1 for t in trials),
+                       raw_outseq_onsets=sum(t['inseq_raw'] == -1 for t in trials),
                        datasets=['odor_decoding.npz', 'position_decoding.npz'])
     _json(output/'preprocessing_config.json', dict(schema_version=2 if decoding else 1, **asdict(config),
         window_policy=f'Fixed {window_range}. Exclude early withdrawals.',
@@ -397,19 +401,23 @@ def process_session(raw_root, session, output, config, plots=True):
         'Residual 60 Hz peaks are preserved; consult channel_quality.json and the PSD before selecting a shared optional notch branch. '
         'Zero context is a placeholder until an encoder is selected. This export is not a fitted CEBRA model or adapter.\n')
     if decoding:
+        trial_selection = 'InSeq and OutSeq' if config.include_outseq else 'InSeq only'
+        retained_status = summary['after']['inseq']
         (output/'preprocessing_qa.md').write_text(
-            f'# {session} InSeq decoding preprocessing QA\n\n'
-            f'{summary["raw_inseq_onsets"]} raw InSeq onsets; {len(kept)} retained; '
+            f'# {session} decoding preprocessing QA\n\n'
+            f'Trial selection: {trial_selection}. Retained {retained_status.get("1", 0)} of '
+            f'{summary["raw_inseq_onsets"]} InSeq trials and {retained_status.get("0", 0)} of '
+            f'{summary["raw_outseq_onsets"]} OutSeq trials. '
             f'{len(keys)}/{len(lfp_meta["keys"])} channels. Exclusions: `{dict(exclusions)}`.\n\n'
             f'Selected trial window: {window_range}.\n\n'
             'odor_decoding.npz and position_decoding.npz contain exactly the same X and shared metadata; '
             'y names odor identity versus ordinal sequence position. Labels are stored 0–4. '
-            f'Encoded targets identical: {summary["target_arrays_identical"]}. '
-            'Fixed-sequence InSeq decoding cannot separate odor-specific from position-specific coding.\n\n'
+            f'Encoded targets identical: {summary["target_arrays_identical"]}.\n\n'
             f'Notch {config.notch_hz} Hz, Q={config.notch_q}, forward-backward at {config.sample_rate_hz} Hz. '
             f'Guard {filter_info["guard_samples"]} samples at every independent filter-block edge. '
-            'Raw thresholds fit candidate InSeq training windows; all filtering context is screened with those frozen rules. '
-            'Final quality/scaling fit unique eligible filtered InSeq training samples. '
+            'Raw thresholds fit candidate training windows from the selected trial types. '
+            'All filtering context is screened with those frozen rules. '
+            'Final quality/scaling fit unique eligible filtered training samples. '
             'raw_quality.npz and scaling.npz retain their separate fit support.\n\n'
             'Filter source support is the entire block recorded per trial and in filter_blocks.csv. '
             'Processing never crosses split boundaries, timestamp gaps or detected context artifacts. '
