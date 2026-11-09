@@ -31,18 +31,25 @@ class Config:
     notch_q: float = 30.0
     filter_tolerance: float = 1e-6
     flatline_ms: float = 100.0
+    window_start_ms: float = 0.0
 
     def validate(self):
         values = (self.window_ms, self.sample_rate_hz, self.train_fraction,
-                  self.validation_fraction, self.artifact_z)
+                  self.validation_fraction, self.artifact_z, self.window_start_ms)
         if not np.isfinite(values).all():
             raise ValueError('Configuration must be finite')
         if self.window_ms <= 0 or self.sample_rate_hz <= 0 or self.artifact_z <= 0:
             raise ValueError('Window, sample rate and artifact threshold must be positive')
+        if self.window_start_ms < 0:
+            raise ValueError('Window start must be at or after odor onset')
         if not 0 < self.train_fraction < 1 or not 0 < self.validation_fraction < 1-self.train_fraction:
             raise ValueError('Split fractions must leave nonempty train/validation/test')
-        n = self.window_ms * self.sample_rate_hz / 1000
-        if not np.isclose(n, round(n), atol=1e-8) or round(n) < 2:
+        samples_per_ms = self.sample_rate_hz / 1000
+        offset = self.window_start_ms * samples_per_ms
+        n = self.window_ms * samples_per_ms
+        if not np.isfinite(offset) or not np.isclose(offset, round(offset), rtol=0, atol=1e-8):
+            raise ValueError('Window start must align with a sample boundary')
+        if not np.isfinite(n) or not np.isclose(n, round(n), rtol=0, atol=1e-8) or round(n) < 2:
             raise ValueError('Window must correspond to at least two integer samples')
         for value in (self.left_context, self.right_context, self.positive_offset):
             if not isinstance(value, int):
@@ -68,6 +75,7 @@ class Config:
 def partition_trials(trials, segments, n_samples, config):
     """Assign entire source intervals first; purge windows crossing a boundary."""
     window = config.validate()
+    offset = round(config.window_start_ms * (config.sample_rate_hz / 1000))
     cuts = [0, int(n_samples*config.train_fraction),
             int(n_samples*(config.train_fraction+config.validation_fraction)), n_samples]
     split_names = ['train', 'validation', 'test']
@@ -77,14 +85,17 @@ def partition_trials(trials, segments, n_samples, config):
             if max(a, lo) < min(b, hi):
                 intervals.append(dict(split=split, segment=segment, start=max(a, lo), end=min(b, hi)))
     for trial in trials:
-        start, end = trial['onset'], trial['onset']+window
-        owner = next(i for i in range(3) if cuts[i] <= start < cuts[i+1])
+        onset = trial['onset']
+        start = onset + offset
+        end = start + window
+        # A delayed window still belongs to the onset's split and segment.
+        owner = next(i for i in range(3) if cuts[i] <= onset < cuts[i+1])
         trial.update(start=start, end=end, split=split_names[owner])
         if end > cuts[owner+1]:
             trial['reasons'].append('split_boundary')
         if end > segments[trial['segment']][1]:
             trial['reasons'].append('recording_boundary')
-        # Exit is exclusive. [onset,onset+n) ending exactly at exit is valid.
+        # Exit is exclusive. A window ending exactly at exit is valid.
         if trial['poke_out'] is not None and end > trial['poke_out']:
             trial['reasons'].append('early_withdrawal')
     return intervals
@@ -228,7 +239,7 @@ def diagnostics(output, raw, scaled, kept, channel_keys, stats, config, plots):
         matplotlib.use('Agg')
         import matplotlib.pyplot as plt
         fig, axes = plt.subplots(3, 1, figsize=(11, 9), constrained_layout=True)
-        time = np.arange(train_raw.shape[1])/config.sample_rate_hz
+        time = config.window_start_ms/1000 + np.arange(train_raw.shape[1])/config.sample_rate_hz
         for ch in range(min(3, len(channel_keys))):
             axes[0].plot(time, train_raw[0, :, ch], label=str(channel_keys[ch]), lw=.7)
             axes[1].plot(time, scaled[train[0], :, ch], lw=.7)
@@ -245,6 +256,8 @@ def diagnostics(output, raw, scaled, kept, channel_keys, stats, config, plots):
 
 def process_session(raw_root, session, output, config, plots=True):
     output.mkdir()
+    window_end_ms = config.window_start_ms + config.window_ms
+    window_range = f'[{config.window_start_ms:g}, {window_end_ms:g}) ms after odor onset'
     source = raw_root/session
     bvr, lfp = source/f'{session}_bvr.npz', source/f'{session}_lfp.npz'
     time, trials, segments, anomalies, bvr_meta, behavior_events = load_behavior(bvr, config.sample_rate_hz)
@@ -355,7 +368,7 @@ def process_session(raw_root, session, output, config, plots=True):
                        raw_inseq_onsets=sum(t['inseq_raw'] == 1 for t in trials),
                        datasets=['odor_decoding.npz', 'position_decoding.npz'])
     _json(output/'preprocessing_config.json', dict(schema_version=2 if decoding else 1, **asdict(config),
-        window_policy='fixed [odor onset, onset+window); exclude early withdrawals',
+        window_policy=f'Fixed {window_range}. Exclude early withdrawals.',
         split_policy='contiguous raw sample index blocks; purge crossing windows; no verified sequence groups',
         quality_policy='unique candidate TRAIN samples; median/MAD (SD fallback); reject whole trial on any retained-channel nonfinite/amplitude/jump violation',
         scaling_policy='unique retained TRAIN samples, population mean/SD',
@@ -371,6 +384,7 @@ def process_session(raw_root, session, output, config, plots=True):
         f'{len(trials)} chronological raw odor onsets; {len(kept)} retained. '
         f'{stats["channel_mask"].sum()}/{len(lfp_meta["keys"])} channels retained.\n\n'
         f'Exclusion reasons (may overlap): `{dict(exclusions)}`.\n\n'
+        f'Selected trial window: {window_range}.\n\n'
         f'300/500 ms withdrawal coverage by raw assigned split: `{coverage_summary}`.\n\n'
         f'Scaling uses {len(stats["scaling_fit_raw_indices"])} unique raw training samples. '
         'See scaling.npz for exact support and fit trial IDs.\n\n'
@@ -387,6 +401,7 @@ def process_session(raw_root, session, output, config, plots=True):
             f'# {session} InSeq decoding preprocessing QA\n\n'
             f'{summary["raw_inseq_onsets"]} raw InSeq onsets; {len(kept)} retained; '
             f'{len(keys)}/{len(lfp_meta["keys"])} channels. Exclusions: `{dict(exclusions)}`.\n\n'
+            f'Selected trial window: {window_range}.\n\n'
             'odor_decoding.npz and position_decoding.npz contain exactly the same X and shared metadata; '
             'y names odor identity versus ordinal sequence position. Labels are stored 0–4. '
             f'Encoded targets identical: {summary["target_arrays_identical"]}. '

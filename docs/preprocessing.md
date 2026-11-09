@@ -33,7 +33,7 @@ NumPy and SciPy are required; Matplotlib is needed for the default QA PNGs (`--n
 
 The window is an **odor-sampling proxy**. Actual odor offset is unknown. The one-sample odor pulses are onset markers; returning to zero does not establish offset. Acquisition filtering, reference and physical voltage units are also unknown. No pre-decision or odor-delivery-only claim follows from this export.
 
-`--window-ms`, `--artifact-z`, `--train-fraction`, `--validation-fraction`, `--sample-rate-hz`, `--left-context`, `--right-context` and `--positive-offset` expose the configuration. A window must contain an integer number of samples. TimeBin must verify the requested sample rate inside each segment. Different window/context settings are separate, explicit runs; no automatic duration choice or validation/test tuning occurs. The QA reports 300/500 ms withdrawal coverage irrespective of the selected window.
+Use `--window-start-ms` and `--window-end-ms` to select a range after odor onset. The end is exclusive. The defaults are 0 and 500 ms. `--window-ms` accepts a duration from the selected start as an alternative to `--window-end-ms`. Both bounds must align with the sampling grid. `--artifact-z`, `--train-fraction`, `--validation-fraction`, `--sample-rate-hz`, `--left-context`, `--right-context` and `--positive-offset` expose the other settings. TimeBin must verify the requested sample rate inside each segment. Run each window/context setting in a separate output directory. The QA reports 300/500 ms withdrawal coverage irrespective of the selected window.
 
 ## Event reconstruction and source ownership
 

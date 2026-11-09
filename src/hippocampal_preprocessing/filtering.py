@@ -183,7 +183,7 @@ def save_notch_qa(output, before, after, kept, keys, mask, info, spectrum, confi
                     title='Continuous training blocks: median channel PSD')
         axes[0].legend()
         i = next(i for i, t in enumerate(kept) if t['split'] == 'train')
-        time_ms = np.arange(before.shape[1])*1000/config.sample_rate_hz
+        time_ms = config.window_start_ms + np.arange(before.shape[1])*1000/config.sample_rate_hz
         axes[1].plot(time_ms, before[i, :, 0], label='Before notch', lw=.8)
         axes[1].plot(time_ms, after[i, :, 0], label='After notch', lw=.8)
         axes[1].set(xlabel='Milliseconds after odor onset', ylabel='Stored units',

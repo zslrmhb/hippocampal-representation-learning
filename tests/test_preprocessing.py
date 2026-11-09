@@ -107,6 +107,22 @@ class EventTests(unittest.TestCase):
         partition_trials(trials, segments, len(time), Config())
         self.assertIn('recording_boundary', trials[1]['reasons'])
 
+    def test_delayed_window_respects_onset_split_and_withdrawal(self):
+        time, events = event_fixture(onsets=(1000, 2000, 6900))
+        events['PokeEvents'].pop(1600)
+        events['PokeEvents'][1350] = -1
+        events['PokeEvents'].pop(2600)
+        events['PokeEvents'][2349] = -1
+        time[7100:] += 5
+        trials, segments, _ = reconstruct(time, events)
+        partition_trials(trials, segments, len(time), Config(window_start_ms=150, window_ms=200))
+        self.assertEqual((trials[0]['start'], trials[0]['end']), (1150, 1350))
+        self.assertEqual(trials[0]['reasons'], [])
+        self.assertIn('early_withdrawal', trials[1]['reasons'])
+        self.assertEqual(trials[2]['split'], 'train')
+        self.assertIn('split_boundary', trials[2]['reasons'])
+        self.assertIn('recording_boundary', trials[2]['reasons'])
+
 
 class QualityTests(unittest.TestCase):
     def test_unique_overlap_statistics_constant_channel_and_holdout_isolation(self):
@@ -246,6 +262,9 @@ class ExportTests(unittest.TestCase):
     def test_bad_configuration_fails_before_output(self):
         for config in (Config(window_ms=0), Config(window_ms=500.1), Config(train_fraction=.9,validation_fraction=.2), Config(left_context=500), Config(artifact_z=float('nan')), Config(positive_offset=0)):
             with self.assertRaises(ValueError): config.validate()
+        for start in (-1, 100000.25, float('nan')):
+            with self.assertRaises(ValueError):
+                Config(window_start_ms=start).validate()
 
 
 if __name__ == '__main__':

@@ -29,7 +29,7 @@ MPLCONFIGDIR=/private/tmp/capstone-matplotlib PYTHONPATH=src python3 -m hippocam
   --profile inseq-decoding --output data/processed/my-inseq-decoding-run
 ```
 
-This mode applies a 60 Hz notch within independent split-owned, artifact-free recording blocks, extracts fixed 0–500 ms windows, and fits channel scaling on retained InSeq training data. It exports `odor_decoding.npz` and `position_decoding.npz` per rat. See [the InSeq dataset contract](docs/inseq-decoding.md) for loading, filter QA and temporal-support limits. On the fixed InSeq sequence, odor and position labels coincide; the two exports do not disentangle the underlying codes.
+This mode applies a 60 Hz notch within independent split-owned, artifact-free recording blocks and fits channel scaling on retained InSeq training data. It exports `odor_decoding.npz` and `position_decoding.npz` per rat. The default window is 0–500 ms after odor onset. For a different range, add flags such as `--window-start-ms 100 --window-end-ms 400`. See [the InSeq dataset contract](docs/inseq-decoding.md) for loading, filter QA and temporal-support limits.
 
 The original unfiltered baseline remains available:
 

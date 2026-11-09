@@ -21,6 +21,16 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 
 The original `--profile baseline` remains the default and keeps the unfiltered all-status behavior. Both modes use raw LFP/behavior, preserve original data, refuse existing/protected output paths, and publish a complete run atomically. No model training occurs. Existing `raw-lfp-v2` outputs are preserved.
 
+Set the inclusive start and exclusive end in milliseconds after odor onset to choose a window for both datasets. For example, `[100, 400)` selects 300 samples per channel at 1000 Hz:
+
+```sh
+PYTHONPATH=src python3 -m hippocampal_preprocessing \
+  --profile inseq-decoding --window-start-ms 100 --window-end-ms 400 \
+  --output data/processed/inseq-100-to-400-ms
+```
+
+The default is `[0, 500)` ms. Both endpoints must align with the sampling grid. Each run uses one range for every trial. For several ranges, repeat the command with a separate output directory for each. Use `--window-ms` to specify a duration from the selected start instead of passing `--window-end-ms`. Trials retain the split of their odor onset. If the selected range would extend past withdrawal or out of the onset's split or recording segment, the trial is excluded. The run config records the start and duration, and the trial manifest records the exact raw sample bounds.
+
 ## Shared preprocessing
 
 1. Reconstruct chronological trials and labels directly from raw behavior. Select InSeq (`InSeqLog == +1`), including incorrect InSeq trials; all raw onsets and exclusions stay in the manifest.
@@ -29,7 +39,7 @@ The original `--profile baseline` remains the default and keeps the unfiltered a
 4. Screen all continuous filter context with those frozen raw thresholds. Exclude nonfinite/amplitude samples, both samples adjoining detected jumps, and exact local flatlines lasting at least 100 ms. Use the union across retained channels to form independent clean blocks. Differences and flatlines never bridge gaps or split boundaries. There is no interpolation/imputation.
 5. Filter each block with a second-order 60 Hz IIR notch, Q=30, at the verified 1000 Hz sampling rate. Apply it forward/backward using second-order sections and odd-reflection padding. The single-pass -3 dB bandwidth is 2 Hz; the effective forward/backward response is squared and has different attenuation bandwidth. Save both responses. No automatic harmonic notches, broad bandpass, rereferencing or downsampling are applied.
 6. Guard every block edge using `ceil(log(tolerance)/log(max_pole_radius))`, with a minimum of nine samples and default tolerance 1e-6. The default guard is 2199 samples (2199 ms) per edge. Padding uses the same number of samples. This is a relative pole-envelope decay criterion, not an absolute voltage-error guarantee. Synthetic impulse and boundary-sensitivity tests check the implementation.
-7. Retain fixed `[odor onset, onset + 500 ms)` windows only if they fit inside a guarded block and the verified poke interval. No time warping, post-withdrawal padding or silent early-withdrawal inclusion. Refit quality rules on eligible filtered InSeq training windows, then compute final per-channel population mean/SD on unique retained training source samples. Freeze those statistics for held-out data and both target exports. A raw-stage removed channel stays removed.
+7. Retain the selected odor-aligned windows (default `[0, 500)` ms) only if they fit inside a guarded block and the verified poke interval. Refit quality rules on eligible filtered InSeq training windows, then compute final per-channel population mean/SD on unique retained training source samples. Freeze those statistics for held-out data and both target exports. A raw-stage removed channel stays removed.
 
 `--notch-hz`, `--notch-q`, `--filter-tolerance` and `--flatline-ms` expose these settings alongside the original window, quality, split and context options. Freeze filter choices using training evidence; do not choose them from final test accuracy. There is no automatic claim that 60 Hz cleaning removes every electrical artifact. Genuine neural activity near 60 Hz is attenuated too.
 
