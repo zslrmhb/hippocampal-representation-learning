@@ -1,0 +1,12 @@
+# Tested position-decoding environment; Python 3.12.
+# Torch build/platform must match your hardware; consult the saved run versions.
+numpy==1.26.4
+pandas==3.0.6
+scipy==1.17.1
+scikit-learn==1.9.1
+torch==2.14.1+cu132
+cebra==0.6.1
+joblib==1.6.0
+threadpoolctl==3.7.0
+nbformat==5.11.1
+ipykernel==7.4.0
