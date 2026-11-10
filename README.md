@@ -24,4 +24,4 @@ Use "uv add \<package>" to add new dependencies.
 
 Start with [the current notebook](notebooks/position_decoding.ipynb). See [the analysis protocol](docs/position_decoding_protocol.md) and requirements-position.txt for reproduction.
 
-Current verified L1 outputs: results/position_l1_verified_20261110/. Earlier runs are in results/archive/; the historical notebook is in notebooks/archive/. Generated source snapshots and model files inside result folders are audit artifacts.
+Current verified L1 outputs: results/position_l1_verified_20261110/. Earlier runs are in results/archive/; the [original notebook with an updated results section](notebooks/position_decoding_cebra.ipynb) is also available. Generated source snapshots and model files inside result folders are audit artifacts.

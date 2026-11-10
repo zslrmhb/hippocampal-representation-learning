@@ -1,7 +1,7 @@
 # Position-decoding analysis protocol
 
 The current entry point is `notebooks/position_decoding.ipynb`.
-Historical `notebooks/archive/position_decoding_cebra.ipynb` and its L2 classifier remain unchanged as a record of the earlier experiment.
+Historical `notebooks/position_decoding_cebra.ipynb` retains the original L2 experiment and includes a separate summary of the latest L1 results.
 
 ## Reproduce
 
