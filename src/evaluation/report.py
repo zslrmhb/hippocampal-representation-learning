@@ -71,7 +71,7 @@ SIGNAL_NOTE = (
 )
 SLIDE_NOTE = (
     "The reviewed four-rat column averages strict five-class BA over the same four rats, excluding Buchanan, "
-    "without pooling trials. Page 26 values are separately transcribed; its historical CEBRA position model "
+    "without pooling trials. The archived finalist scores are included in the evidence packet; the historical CEBRA position model "
     "used 200 ms, not 500 ms. This is a cross-check, not the primary estimand or a paired test."
 )
 REPO_URL = "https://github.com/zslrmhb/hippocampal-representation-learning#1-poster-rebuild-from-reviewed-aggregates"
@@ -119,8 +119,8 @@ def slide_table(evidence):
     return [{
         "Target": TARGETS[r["target"]], "Model family": MODELS[r["model"]],
         "Reviewed four-rat BA · 500 ms": _pct(r["current_ba"]),
-        "Slide p. 26 reference": _pct(r["slide_ba"]),
-        "Slide window": f"{r['slide_window_ms']} ms", "Slide configuration": r["slide_configuration"],
+        "Archived finalist BA": _pct(r["slide_ba"]),
+        "Archived window": f"{r['slide_window_ms']} ms", "Archived configuration": r["slide_configuration"],
     } for r in evidence["slide_check"]]
 
 
