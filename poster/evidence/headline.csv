@@ -1,0 +1,9 @@
+target,model,split,ba,observed_macro_recall,n,n_rat,n_rat_ba
+odor,cebra_combined_mean,test,,0.4953333333333333,86,5,4
+odor,cebra_combined_mean,val,0.44676190476190475,0.44676190476190475,137,5,5
+odor,historical_anchor,test,,0.566063492063492,86,5,4
+odor,historical_anchor,val,0.47104761904761905,0.47104761904761905,137,5,5
+position,cebra_combined_mean,test,,0.3883888888888889,94,5,4
+position,cebra_combined_mean,val,0.4428658008658008,0.4428658008658008,149,5,5
+position,historical_anchor,test,,0.4536190476190476,94,5,4
+position,historical_anchor,val,0.5078614718614718,0.5078614718614718,149,5,5

@@ -1,0 +1,6 @@
+session,status,legacy_status,legacy_windows,legacy_peak_hz,legacy_attenuation_db,high_resolution_status,windows,peak_hz,attenuation_db,evidence_status
+Barat,done,done,1274,60.0,30.629953975932438,done,156,,54.3598359218642,runner_reported
+Buchanan,done,done,965,60.0,32.25756854364426,done,110,,58.74368769268109,runner_reported
+Mitt,done,done,1795,60.0,43.88550391039102,done,220,60.0,64.01723601378507,independently_reviewed_mitt
+Stella,done,done,1057,60.0,34.10086673371229,done,128,60.0,60.25626789488132,runner_reported
+Superchris,done,done,962,60.0,36.147381488475745,done,110,60.0,60.149831635511205,runner_reported

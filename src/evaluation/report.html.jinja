@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direct versus learned hippocampal LFP features</title>
+<style>
+  :root { color-scheme: light; --ink: #142f3b; --muted: #486071; --line: #bacbd0; --paper: #fff; --wash: #f0f6f5; --accent: #146c62; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #eaf1f1; color: var(--ink); font: 16px/1.48 system-ui, sans-serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 0 24px 44px; }
+  section { margin: 26px 0; padding: 32px 40px; border: 1px solid var(--line); background: var(--paper); }
+  nav { display: flex; flex-wrap: wrap; gap: 8px 24px; padding: 20px 12px 0; }
+  a { color: #11625c; text-underline-offset: .18em; }
+  h1, h2, h3, p { margin: 0 0 .65em; }
+  h1 { font-size: clamp(2.3rem, 5vw, 3.75rem); font-weight: 760; line-height: 1.04; letter-spacing: -.035em; max-width: 870px; }
+  h2 { font-size: clamp(1.6rem, 4vw, 2.35rem); line-height: 1.12; letter-spacing: -.025em; }
+  h3 { font-size: 1.13em; line-height: 1.2; margin-top: .45em; }
+  .eyebrow { color: var(--accent); font-size: .74em; font-weight: 780; letter-spacing: .11em; text-transform: uppercase; margin-bottom: 10px; }
+  .lead { font-size: 1.2em; line-height: 1.35; max-width: 780px; }
+  .note { color: var(--muted); font-size: .91em; line-height: 1.37; }
+  .callout { border-left: 4px solid var(--accent); background: var(--wash); padding: .65em .9em; margin: .8em 0; }
+  .table-wrap { width: 100%; overflow-x: auto; margin: 0 0 .65em; }
+  table { width: 100%; border-collapse: collapse; text-align: left; font-size: .91em; font-variant-numeric: tabular-nums; line-height: 1.3; }
+  th, td { border-bottom: 1px solid var(--line); padding: .43em .54em; vertical-align: top; }
+  thead th { background: var(--wash); }
+  figure { margin: 0 0 .6em; min-width: 0; }
+  figcaption { color: var(--muted); font-size: .9em; line-height: 1.35; margin: .2em 0 .45em; }
+  .two-column { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+  .plot { width: 100%; height: 300px; }
+  #plot-workflow { height: 354px; }
+  #plot-projection { height: 330px; }
+  #plot-outseq { height: 115px; }
+  #plot-matrix { height: 630px; min-width: 625px; }
+  .wide-plot { overflow: auto; }
+  .fig-short { margin-top: .5em; }
+  .workflow { min-width: 575px; }
+  #plot-outseq { min-width: 390px; }
+  code, pre { font-family: ui-monospace, monospace; font-size: .94em; }
+  pre { background: var(--wash); padding: .65em .9em; overflow-x: auto; line-height: 1.3; margin: .5em 0; }
+  summary { font-weight: 700; cursor: pointer; }
+  details ul { margin: .4em 0; }
+  #render-status { padding: .85em; color: #943618; background: #fceae3; }
+  @media (max-width: 790px) {
+    main { padding: 0 10px 20px; }
+    section { padding: 18px; }
+    .two-column { grid-template-columns: minmax(0, 1fr); }
+    #plot-paired, #plot-projection { min-width: 510px; }
+  }
+  @page { size: A4; margin: 14mm 15mm; }
+  @media print {
+    body { background: white; font-size: 13px; line-height: 1.35; }
+    main { max-width: none; padding: 0; }
+    section { padding: 0; margin: 0; border: 0; break-before: page; }
+    section:first-of-type { break-before: auto; }
+    h1 { font-size: 39px; }
+    h2 { font-size: 27px; }
+    h3 { break-after: avoid; }
+    figure, table, .callout { break-inside: avoid; }
+    th, td { padding: .35em .45em; }
+    .table-wrap, .wide-plot { overflow: visible; }
+    .two-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .screen-only, .modebar, .updatemenu-container { display: none !important; }
+    #plot-workflow { height: 354px; }
+    #plot-paired { height: 235px; }
+    #plot-weights, #plot-masking { height: 211px; }
+    #plot-projection { height: 212px; }
+    #plot-outseq { height: 83px; }
+    .note, figcaption { font-size: 11.5px; }
+    pre { font-size: 11px; white-space: pre-wrap; }
+  }
+</style>
+</head>
+<body>
+{% macro table(rows, label) -%}
+<div class="table-wrap"><table aria-label="{{ label }}">
+  <thead><tr>{% for column in rows[0] %}<th scope="col">{{ column }}</th>{% endfor %}</tr></thead>
+  <tbody>{% for row in rows %}<tr>{% for value in row.values() %}<td>{{ value }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+</table></div>
+{%- endmacro %}
+{% macro plot(name, label, extra='') -%}
+<div id="plot-{{ name }}" class="plot {{ extra }}" role="region" aria-label="{{ label }}" data-plot="{{ name }}"></div>
+{%- endmacro %}
+<main>
+<nav class="screen-only" aria-label="Report sections">
+  <a href="#question">Question</a><a href="#methods">Methods</a><a href="#evaluation">Evaluation</a>
+  <a href="#interpretation">Interpretation</a><a href="#benchmark">Benchmark and reproducibility</a>
+</nav>
+<p id="render-status" role="alert" hidden></p>
+<noscript>JavaScript is required for the graphs. The reviewed aggregate results are available in the tables below.</noscript>
+<section id="question">
+  <p class="eyebrow">01 / Scientific question · reviewed five-rat comparison</p>
+  <h1>Direct versus learned hippocampal LFP features</h1>
+  <p class="lead">{{ question }}</p>
+  <p>{{ comparison_note }}</p>
+  <p class="callout"><strong>Result:</strong> {{ result_note }}</p>
+  <figure class="wide-plot">
+    <h3>From signal to frozen predictions</h3>
+    {{ plot('workflow', 'Workflow from raw recordings through chronological splits, preprocessing and two decoder branches', 'workflow') }}
+    <figcaption>Inputs come from the same odor-aligned, split-owned 500 ms windows in both branches. All fitted transformations are learned from training samples only.</figcaption>
+  </figure>
+  <p class="note">{{ task_note }}</p>
+</section>
+<section id="methods">
+  <p class="eyebrow">02 / Matched protocol</p>
+  <h2>What the two models share—and what differs</h2>
+  <div class="table-wrap"><table aria-label="Modeling comparison">
+    <thead><tr><th scope="col">Choice</th>{% for model in models %}<th scope="col">{{ model }}</th>{% endfor %}</tr></thead>
+    <tbody>
+      {% for choice, direct, learned in protocol %}
+      <tr><th scope="row">{{ choice }}</th><td>{{ direct }}</td><td>{{ learned }}</td></tr>
+      {% endfor %}
+      <tr><th scope="row">Common controls</th><td colspan="2">{{ controls_note }}</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Split ownership and signal quality</h3>
+  <p>{{ split_note }}</p>
+  <p>{{ filter_note }}</p>
+  <h3>60 Hz checks on TRAIN recordings</h3>
+  {{ table(signal, 'Stage 1 legacy and high-resolution training spectral evidence') }}
+  <p class="note">{{ signal_note }}</p>
+</section>
+<section id="evaluation">
+  <p class="eyebrow">03 / Reviewed results · same 500 ms windows</p>
+  <h2>The direct baseline scores higher on both targets</h2>
+  {{ table(headline, 'Reviewed headline scores and denominators') }}
+  <p class="note">{{ metrics_note }}</p>
+  <figure class="wide-plot">
+    <h3>Paired retrospective test recall by rat</h3>
+    {{ plot('paired', 'Paired observed-class test recall by rat for both models and targets') }}
+    <figcaption>Lines connect models on matched trial labels within each rat, not independent replicates. No population interval is inferred from these five previously viewed rats.</figcaption>
+  </figure>
+  <h3>Cross-check against the original slide</h3>
+  {{ table(slide, 'Four-rat strict balanced accuracy slide reconciliation') }}
+  <p class="note">{{ slide_note }}</p>
+</section>
+<section id="interpretation">
+  <p class="eyebrow">04 / What the models use · training and validation only</p>
+  <h2>Interpretability with fixed models</h2>
+  <div class="two-column">
+    <figure>
+      <h3>Signed L1 coefficient means</h3>
+      {{ plot('weights', 'Mitt position class 3 standardized coefficient signed means by frequency and bin') }}
+      <figcaption>Mitt, position class 3, amplitude head. Means include every electrode, including zeros; opposite signs can cancel. {{ interpretation.weights }}</figcaption>
+    </figure>
+    <figure>
+      <h3>Grouped validation masking</h3>
+      {{ plot('masking', 'Per-rat validation balanced accuracy change after masking frequency or time groups') }}
+      <figcaption>Intact minus masked BA (positive means a drop). Each group is set to its TRAIN feature mean in the fitted head scaler. No refit, feature selection, or test masking.</figcaption>
+    </figure>
+  </div>
+  <figure class="wide-plot fig-short">
+    <h3>CEBRA validation centroids · Mitt position model</h3>
+    {{ plot('projection', 'Mitt position CEBRA validation centroids grouped by odor and position on two shared axes') }}
+    <figcaption>PCA is fitted on TRAIN only; the classifier uses all eight latent dimensions. Marker area reflects class support. {{ interpretation.projection }} All-trial view in print. InSeq odor and position co-vary.</figcaption>
+  </figure>
+  <h3>OutSeq diagnostic · previously viewed test, descriptive</h3>
+  <figure class="wide-plot">{{ plot('outseq', 'Decision diagram classifying a prediction as observed position, usual position, or neither') }}</figure>
+  {{ table(outseq, 'OutSeq observed versus usual position counts on matched previously viewed trials') }}
+  <p class="note">{{ outseq_note }}</p>
+</section>
+<section id="benchmark">
+  <p class="eyebrow">05 / Separate benchmark · limitations · audit</p>
+  <h2>The encoder × decoder matrix is not the poster comparison</h2>
+  <p>Each target has a 15 encoder × 13 decoder grid. Across both targets there are {{ manifest.counts.matrix_slots }} rows including {{ manifest.counts.historical_anchors }} separately labeled fixed historical anchors, {{ manifest.counts.scheduled_pairs }} scheduled pairs (66 per target), and explicitly unscheduled cells. The search recorded {{ manifest.counts.terminal_tuning_trials }} terminal tuning trials. Rank and recommendations use validation only.</p>
+  {{ table(winners, 'Locked validation winners from the separate matrix') }}
+  <p class="note">These are descriptive locked validation winners, not test-selected recommendations. The underlying grid includes different feature views and fitting supports; the scores do not isolate architecture. The previously viewed test is not untouched confirmation. The main comparison uses a fixed seed, not a distribution of training runs.</p>
+  <figure class="screen-only wide-plot">
+    <h3>Interactive validation matrix</h3>
+    {{ plot('matrix', 'Validation-only matrix; choose Odor or Position; hover for the exact input view and status') }}
+    <figcaption>Gray denotes cells without validation scores, including unscheduled pairs; hover for status and exact pair input view. Fixed historical anchors are excluded from the grid and shown separately in the <a href="#evaluation">reviewed evaluation</a>. No retrospective ranks are displayed.</figcaption>
+  </figure>
+  <h3>What the release reproduces</h3>
+  <p>Grouped masking is a fixed-head, validation-only sensitivity analysis. The matrix was a separate validation search; this release renders its reviewed aggregates without rerunning the search. Neither supplies independent confirmation.</p>
+  <h3 id="reproducibility">Two ways to reproduce the results</h3>
+  <p><strong>Aggregate rebuild:</strong> the standalone report and the unexecuted <code>notebooks/poster_results.ipynb</code> use the same checksummed packet. No recordings, model weights, CUDA, W&amp;B, or TensorBoard are required to open or rebuild the aggregate results.</p>
+  <p><strong>Private scientific replay:</strong> replay the frozen checkpoints with authorized recordings. The checkout code revision updates implementation hashes without changing the original evidence packet or expected results. See the <a href="{{ repo_url }}">repository README</a> for both build and replay commands.</p>
+  <p class="note">Audit trail: the <a href="#evidence-audit">packet manifest</a> binds the reviewed matrix, Phase 1 evidence and interpretation receipts. The independent matrix review is bound by its review, freeze and test-evaluation digests; private original artifacts are not needed to render this report.</p>
+  <details id="evidence-audit" class="screen-only">
+    <summary>Verified aggregate evidence manifest</summary>
+    <pre>{{ manifest | tojson(indent=2) }}</pre>
+  </details>
+</section>
+</main>
+<script>{{ plotlyjs | safe }}</script>
+<script id="poster-figure-specs" type="application/json">{{ figures | tojson }}</script>
+<script>
+  const specs = JSON.parse(document.getElementById('poster-figure-specs').textContent);
+  const config = {{ config | tojson }};
+  const printing = window.matchMedia('print').matches;
+  (async () => {
+    try {
+      await Promise.all(Object.entries(specs).map(async ([name, spec]) => {
+        if (printing && name === 'matrix') return;
+        delete spec.layout.height;
+        spec.layout.autosize = true;
+        if (printing) {
+          delete spec.layout.updatemenus;
+          if (name === 'projection') spec.layout.margin.t = 24;
+        }
+        await Plotly.newPlot(document.getElementById('plot-' + name), spec.data, spec.layout, config);
+      }));
+      window.posterReady = true;
+    } catch (error) {
+      window.posterRenderError = String(error);
+      const status = document.getElementById('render-status');
+      status.textContent = 'Figure rendering failed: ' + window.posterRenderError;
+      status.hidden = false;
+    }
+  })();
+</script>
+</body>
+</html>
