@@ -1,6 +1,6 @@
 # Archived decoding experiments
 
-This guide covers two studies separate from the poster’s fixed 500 ms comparison: a four-stage ablation of signal representations and time windows, and a later encoder–decoder matrix. The notebooks, protocols, and saved scores below are the entry points. No external document is needed.
+Two experiments complement the poster’s fixed 500 ms comparison: a four-stage ablation of features and time windows, and a later encoder–decoder matrix.
 
 ## Rebuild the figures
 
@@ -8,10 +8,10 @@ From the repository root:
 
 ```bash
 uv sync --locked
-uv run --locked jupyter lab
+uv run --locked jupyter notebook
 ```
 
-Open the notebooks using the root Python 3 kernel. Keep the source notebooks output-free in Git. Derived figures and preprocessing caches belong in ignored `results/`.
+Open a notebook below, choose **Python 3 (ipykernel)**, and run all cells. Save generated figures and caches to `results/`, not Git.
 
 | Analysis | Where to start | Inputs and scope |
 | --- | --- | --- |
