@@ -1,16 +1,46 @@
 [project]
 name = "hippocampal-representation-learning"
-version = "0.1.0"
-requires-python = ">=3.11"
+version = "1.0.0"
+description = "Hippocampal LFP poster reproduction and frozen scientific replay"
+requires-python = ">=3.11,<3.12"
 dependencies = [
-    "cebra>=0.4.0",
-    "matplotlib>=3.11.2",
-    "numpy>=1.26.4",
-    "plotly>=7.1.0",
-    "scipy>=1.17.1",
+    "numpy==2.2.6",
+    "matplotlib==3.10.3",
+    "scipy==1.15.3",
+    "plotly==6.3.1",
+    "pandas==2.2.3",
+    "jinja2==3.1.6",
+    "nbformat==5.10.4",
+    "nbclient==0.10.2",
+    "ipykernel==6.30.1",
+    "jupyterlab==4.4.9",
+    "playwright==1.55.0",
 ]
 
 [dependency-groups]
-dev = [
-    "ipykernel>=7.4.0",
+dev = ["pypdf==6.1.1"]
+replay = [
+    "cebra==0.6.1; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "torch==2.7.1+cu126; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "scikit-learn==1.6.1; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "joblib==1.5.1; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "threadpoolctl==3.8.0; sys_platform == 'linux' and platform_machine == 'x86_64'",
 ]
+
+[tool.uv]
+package = false
+environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform != 'linux' or platform_machine != 'x86_64'",
+]
+constraint-dependencies = [
+    "packaging==25.0",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu126" }
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
