@@ -1,0 +1,2464 @@
+{
+  "run_id": "rat-pair-matrix-v1",
+  "frozen_source_sha256": "65a49073f559d18db27a84b62cc0218e73e931b97a3be3a3acac312c1fedd0a0",
+  "pairs": [
+    {
+      "pair_id": "odor/amp_bin50/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_bin50/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "C": 0.01
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_bin50/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 12,
+      "decoder_config": {
+        "C": 20.600959907293536,
+        "gamma_multiplier": 0.03528195370217109
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/hist_boost",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 11,
+      "decoder_config": {
+        "learning_rate": 0.044500428153506,
+        "max_iter": 120,
+        "min_samples_leaf": 14,
+        "l2_regularization": 0.026947184298859467,
+        "max_depth": 5,
+        "max_leaf_nodes": null
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/xgboost",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 12,
+      "decoder_config": {
+        "max_depth": 4,
+        "min_child_weight": 2,
+        "learning_rate": 0.03359338595539309,
+        "n_estimators": 180,
+        "reg_lambda": 0.010645452232776584
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/lightgbm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 11,
+      "decoder_config": {
+        "max_depth": 3,
+        "min_child_samples": 8,
+        "learning_rate": 0.18763420204867268,
+        "n_estimators": 160,
+        "reg_lambda": 0.0608568369438421,
+        "num_leaves": 7
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/random_forest",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "n_estimators": 192,
+        "max_depth": 4,
+        "min_samples_leaf": 2,
+        "max_features": "sqrt"
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/extra_trees",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 15,
+      "decoder_config": {
+        "n_estimators": 128,
+        "min_samples_leaf": 6,
+        "max_depth": null,
+        "max_features": "sqrt"
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/gaussian_nb",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "var_smoothing": 1e-09
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/amp_mean/gaussian_process",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "length_multiplier": 0.5
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/voltage_bin50/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/voltage_bin50/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/voltage_bin50/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/wave_cov/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/wave_cov/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "C": 0.001
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/wave_cov/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/grf025/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/grf025/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/grf025/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/grf100/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/grf100/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/grf100/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "C": 1.0,
+        "gamma_multiplier": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/hist_boost",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 7,
+      "decoder_config": {
+        "learning_rate": 0.18520400320690247,
+        "max_iter": 200,
+        "min_samples_leaf": 5,
+        "l2_regularization": 0.001373782391672383,
+        "max_depth": 2,
+        "max_leaf_nodes": null
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/xgboost",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 6,
+      "decoder_config": {
+        "max_depth": 4,
+        "min_child_weight": 9,
+        "learning_rate": 0.19728440067262787,
+        "n_estimators": 140,
+        "reg_lambda": 1.7124931384157513
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/lightgbm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 6,
+      "decoder_config": {
+        "max_depth": 2,
+        "min_child_samples": 8,
+        "learning_rate": 0.16175699640668392,
+        "n_estimators": 200,
+        "reg_lambda": 0.01984366527405797,
+        "num_leaves": 3
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/random_forest",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "n_estimators": 192,
+        "max_depth": 4,
+        "min_samples_leaf": 2,
+        "max_features": "sqrt"
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/extra_trees",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "n_estimators": 192,
+        "min_samples_leaf": 4,
+        "max_depth": null,
+        "max_features": "sqrt"
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/gaussian_nb",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "var_smoothing": 1e-09
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/cebra_combined_mean/gaussian_process",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "length_multiplier": 0.5
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_jepa/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_jepa/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_jepa/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_infonce/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_infonce/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "C": 0.001
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_infonce/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_random_frozen/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_random_frozen/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/continuous_random_frozen/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca08/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca08/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca08/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca08/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 13,
+      "decoder_config": {
+        "C": 2.4767711928017673,
+        "gamma_multiplier": 0.1407327970471572
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca16/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca16/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "C": 0.01
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca16/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca16/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 5,
+      "decoder_config": {
+        "C": 0.36103925393624314,
+        "gamma_multiplier": 0.9901896654500222
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca32/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca32/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "C": 0.01
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca32/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/pca32/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 12.605449891628638,
+        "gamma_multiplier": 0.3278670466974609
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/minirocket/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/minirocket/ridge",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "alpha": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/wave_tangent/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/wave_tangent/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "C": 0.001
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/wave_tangent/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/wave_tangent/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 15,
+      "decoder_config": {
+        "C": 2.898416453690494,
+        "gamma_multiplier": 0.07931113370462756
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "odor/historical_anchor/linear_l1",
+      "is_anchor": true,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {
+        "per_session": {
+          "080718_mitt": {
+            "C": 10.0
+          },
+          "081106_barat": {
+            "C": 0.1
+          },
+          "090212_stella": {
+            "C": 10.0
+          },
+          "090212_superchris": {
+            "C": 10.0
+          },
+          "090420_buchanan": {
+            "C": 1.0
+          }
+        }
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_bin50/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_bin50/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_bin50/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 14,
+      "decoder_config": {
+        "C": 31.904806224753766,
+        "gamma_multiplier": 0.08766265288941105
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/hist_boost",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 14,
+      "decoder_config": {
+        "learning_rate": 0.10371765980832136,
+        "max_iter": 120,
+        "min_samples_leaf": 7,
+        "l2_regularization": 0.6158471444949098,
+        "max_leaf_nodes": 9,
+        "max_depth": null
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/xgboost",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "max_depth": 3,
+        "min_child_weight": 2,
+        "learning_rate": 0.09834506994809382,
+        "n_estimators": 80,
+        "reg_lambda": 0.08189815466749077
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/lightgbm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "max_depth": 3,
+        "min_child_samples": 15,
+        "learning_rate": 0.04276790735640937,
+        "n_estimators": 120,
+        "reg_lambda": 0.35236268200271254,
+        "num_leaves": 4
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/random_forest",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "n_estimators": 192,
+        "min_samples_leaf": 4,
+        "max_depth": null,
+        "max_features": "sqrt"
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/extra_trees",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 5,
+      "decoder_config": {
+        "n_estimators": 192,
+        "max_depth": 7,
+        "min_samples_leaf": 6,
+        "max_features": 0.34519307046351
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/gaussian_nb",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "var_smoothing": 1e-09
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/amp_mean/gaussian_process",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "length_multiplier": 0.5
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/voltage_bin50/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/voltage_bin50/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/voltage_bin50/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/wave_cov/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/wave_cov/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "C": 0.01
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/wave_cov/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/grf025/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/grf025/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/grf025/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/grf100/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/grf100/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/grf100/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "C": 1.0,
+        "gamma_multiplier": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/hist_boost",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 7,
+      "decoder_config": {
+        "learning_rate": 0.19038217708209937,
+        "max_iter": 160,
+        "min_samples_leaf": 5,
+        "l2_regularization": 0.025269122639420123,
+        "max_leaf_nodes": 24,
+        "max_depth": null
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/xgboost",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 14,
+      "decoder_config": {
+        "max_depth": 4,
+        "min_child_weight": 7,
+        "learning_rate": 0.12602534613700983,
+        "n_estimators": 80,
+        "reg_lambda": 7.424373081300791
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/lightgbm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 12,
+      "decoder_config": {
+        "max_depth": 3,
+        "min_child_samples": 21,
+        "learning_rate": 0.027791522290244786,
+        "n_estimators": 40,
+        "reg_lambda": 0.010279413683937666,
+        "num_leaves": 3
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/random_forest",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 12,
+      "decoder_config": {
+        "n_estimators": 192,
+        "max_depth": 4,
+        "min_samples_leaf": 3,
+        "max_features": "sqrt"
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/extra_trees",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 12,
+      "decoder_config": {
+        "n_estimators": 128,
+        "max_depth": 5,
+        "min_samples_leaf": 8,
+        "max_features": "sqrt"
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/gaussian_nb",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "var_smoothing": 1e-09
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/cebra_combined_mean/gaussian_process",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "length_multiplier": 0.5
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_jepa/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_jepa/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 3,
+      "decoder_config": {
+        "C": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_jepa/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_infonce/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_infonce/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 0,
+      "decoder_config": {
+        "C": 0.001
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_infonce/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_random_frozen/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_random_frozen/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/continuous_random_frozen/cosine_3nn",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca08/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca08/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca08/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca08/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 10.0,
+        "gamma_multiplier": 1.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca16/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca16/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca16/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca16/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 13,
+      "decoder_config": {
+        "C": 2.6023472006633717,
+        "gamma_multiplier": 0.1693137112202496
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca32/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca32/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "C": 0.1
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca32/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/pca32/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 10,
+      "decoder_config": {
+        "C": 8.398955607442502,
+        "gamma_multiplier": 0.169118295989159
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/minirocket/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 1,
+      "decoder_config": {
+        "C": 0.01
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/minirocket/ridge",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 2,
+      "decoder_config": {
+        "alpha": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42,
+          43,
+          44
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/wave_tangent/linear_l1",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "pair_id": "position/wave_tangent/linear_l2",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 4,
+      "decoder_config": {
+        "C": 10.0
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/wave_tangent/shrinkage_lda",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {},
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/wave_tangent/rbf_svm",
+      "is_anchor": false,
+      "status": "complete",
+      "selected_trial": 15,
+      "decoder_config": {
+        "C": 34.141302890751284,
+        "gamma_multiplier": 0.36482369693242916
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42
+        ]
+      }
+    },
+    {
+      "pair_id": "position/historical_anchor/linear_l1",
+      "is_anchor": true,
+      "status": "complete",
+      "selected_trial": null,
+      "decoder_config": {
+        "per_session": {
+          "080718_mitt": {
+            "C": 0.1
+          },
+          "081106_barat": {
+            "C": 10.0
+          },
+          "090212_stella": {
+            "C": 10.0
+          },
+          "090212_superchris": {
+            "C": 1.0
+          },
+          "090420_buchanan": {
+            "C": 0.1
+          }
+        }
+      },
+      "seed_coverage": {
+        "encoder": [
+          42
+        ],
+        "head": [
+          42,
+          43,
+          44
+        ]
+      }
+    }
+  ]
+}
