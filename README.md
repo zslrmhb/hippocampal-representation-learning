@@ -1,22 +1,21 @@
 # Hippocampal Representation Learning
 
-This project asks whether hippocampal local field potentials (LFPs) can predict which odor a rat smelled and where it appeared in a learned sequence. It compares direct wavelet features with learned representations across five rats. The repository contains the methods, reviewed results, and figure-building workflows; no slide deck is required.
+Can hippocampal local field potentials (LFPs) tell us which odor a rat smelled and where it appeared in a learned sequence? We compare direct wavelet features with learned representations across five rats.
 
 ## Start here
 
 | I want to… | Go to | What I need |
 | --- | --- | --- |
-| View or rebuild the final poster results | [Quick start](#1-poster-rebuild-from-reviewed-aggregates) · [Poster notebook](notebooks/poster_results.ipynb) | Python 3.11 and uv; no recordings or checkpoints |
-| Build the landscape poster or inspect its all-rat interpretation | [Poster layout and evidence map](poster/README.md) · [Interpretation notebook](notebooks/poster_interpretation.ipynb) | Checked-in aggregates; Chromium for PDF export |
-| Put the poster materials in Deepnote or Jupyter | [Standalone `poster.ipynb`](notebooks/poster.ipynb) · [Upload instructions](poster/README.md#deepnote-working-notebook) | NumPy, pandas, SciPy, and Plotly 6; raw recordings and print export are optional |
-| Explore the archived decoding comparisons | [Experiment guide](presentation/README.md) · [Decoding notebook](notebooks/presentation_decoding.ipynb) | The checked-in model score aggregates |
-| Explore the recordings or regenerate preprocessing figures | [Exploratory notebooks](#exploratory-notebooks) | Authorized raw recordings |
-| Recompute the fixed poster comparison from source data | [Private scientific replay](#private-scientific-replay) | Authorized recordings and frozen CEBRA checkpoints; Linux x86_64 |
-| Inspect the historical experiment settings | [Ablation protocol](presentation/configs/ablation.json) · [Encoder–decoder matrix protocol](presentation/configs/encoder_decoder_matrix.json) | Nothing to install; the search and ablation runners are not included |
+| Rebuild the poster report | [Quick start](#1-poster-rebuild-from-reviewed-aggregates) · [Results notebook](notebooks/poster_results.ipynb) | Python 3.11 and uv; no recordings or checkpoints |
+| Build the landscape poster | [Layout and evidence guide](poster/README.md) · [Interpretation notebook](notebooks/poster_interpretation.ipynb) | Chromium for PDF export only |
+| Use the standalone poster workbook | [`poster.ipynb`](notebooks/poster.ipynb) · [Deepnote upload guide](poster/README.md#deepnote-working-notebook) | Jupyter Notebook or Deepnote; raw recordings are optional |
+| Compare archived models | [Experiment guide](presentation/README.md) · [Decoding notebook](notebooks/presentation_decoding.ipynb) | Included score tables |
+| Explore the raw signals | [Recording notebooks](#exploratory-notebooks) | Authorized recordings |
+| Recompute the fixed comparison | [Private replay](#private-scientific-replay) | Authorized recordings and frozen CEBRA checkpoints; Linux x86_64 |
 
 **Main finding.** With 500 ms windows after odor onset, direct wavelet amplitude led on sequence position, while odor scores were nearly tied on the four-rat test. This compares complete pipelines, not architectures in isolation. The test was previously viewed; it is descriptive, not independent confirmation.
 
-**How to read the scores.** Balanced accuracy gives each class equal weight within a rat, then weights the rats equally. The landscape poster shows strict five-class test scores for four rats because Buchanan lacks one test class, and validation scores for all five. The detailed report also shows test recall averaged over the classes observed in each of the five rats; it is a different metric.
+**How to read the scores.** Balanced accuracy weights each class equally within a rat, then weights rats equally. Validation includes all five rats. The strict test includes four rats because Buchanan is missing one class. The report also shows test recall over observed classes for all five rats; it is not the same metric.
 
 **Targets.** Odor predicts A–E on correct in-sequence trials. Position predicts order (1–5), not physical location, on correct in-sequence and out-of-sequence trials. For example, if C usually appears third but appears fifth, odor is C and position is 5.
 
@@ -31,9 +30,15 @@ uv run --locked python -B src/evaluation/report.py build \
   --evidence poster/evidence --output "$out"
 ```
 
-Open `results/poster-release-artifact/poster-results.html` in a browser. To explore the figures interactively, run `uv run --locked jupyter lab`, open the [poster notebook](notebooks/poster_results.ipynb), select **Python 3 (ipykernel)**, and run all cells.
+Open `results/poster-release-artifact/poster-results.html` in a browser. For the interactive results, launch Jupyter Notebook from the repository root:
 
-- **Executed notebook:** replace `build` with `notebook` in the command above.
+```bash
+uv run --locked jupyter notebook notebooks/poster_results.ipynb
+```
+
+Select **Python 3 (ipykernel)** and run all cells.
+
+- **Executed notebook file:** in the HTML build command, replace `report.py build` with `report.py notebook`.
 - **Detailed report PDF:** run `uv run --locked playwright install chromium`, then add `--pdf` to the `build` command.
 - **Single-page landscape poster and wireframe:** follow the [poster guide](poster/README.md) instead.
 
@@ -54,11 +59,11 @@ uv run --locked --group replay --python 3.11.18 python -B -m evaluation.replay v
   --spec poster/replay-code.json --output "$out"
 ```
 
-Use a fresh output directory. The full run checks exact validation parity before scoring the previously viewed test; `verify` checks a completed replay without reopening raw recordings or fitting models. For weights, masking, and latent projection only, add `--interpretability-only` to `run` and skip the full-receipt `verify` command.
+Use a fresh output directory. Replay must match the recorded validation results before it scores the previously viewed test. `verify` checks the completed run without raw recordings or model fitting. For weights, masking, and latent projection only, add `--interpretability-only` to `run` and skip `verify`.
 
 ## Archived decoding experiments
 
-The [experiment guide](presentation/README.md) explains the four-stage ablation and the separate, later encoder–decoder matrix. For the ablation results, open the [decoding notebook](notebooks/presentation_decoding.ipynb) to compare decoders, time windows, and CEBRA settings. For the later experiment, see the [matrix results](poster/evidence/matrix.csv) and [frozen decoder settings](presentation/configs/encoder_decoder_selection.json). These are saved results, not new test runs.
+The [experiment guide](presentation/README.md) documents the four-stage ablation and the later encoder–decoder matrix. The [decoding notebook](notebooks/presentation_decoding.ipynb) compares windows, features, and decoders using saved scores. For the later study, see the [matrix scores](poster/evidence/matrix.csv) and [selected settings](presentation/configs/encoder_decoder_selection.json).
 
 ## Repository layout
 
@@ -74,11 +79,11 @@ The [experiment guide](presentation/README.md) explains the four-stage ablation 
 | [`tests/`](tests/) | Evidence integrity and scientific replay gate tests |
 | `results/` | Ignored local output; not part of the release |
 
-[`src/data_processing/vendor/`](src/data_processing/vendor/) contains original in-repo recording, event, filtering, and QC helpers, not third-party dependencies. Keeping these files together preserves the reviewed preprocessing fingerprints.
+[`src/data_processing/vendor/`](src/data_processing/vendor/) contains the original project’s recording readers and signal helpers, not third-party code. Their hashes are pinned for replay.
 
 ## Exploratory notebooks
 
-Launch JupyterLab as above. Place authorized `*_lfp.npz` and `*_bvr.npz` pairs under `data/raw_data/`; if an authorized Git LFS copy is published separately, use `git lfs pull` in that checkout. Keep derived caches and figures in ignored `results/`.
+From the repository root, run `uv run --locked jupyter notebook`. Put authorized `*_lfp.npz` and `*_bvr.npz` pairs in `data/raw_data/`. Generated caches and figures belong in `results/`.
 
 | Notebook | What it covers | Recordings |
 | --- | --- | --- |

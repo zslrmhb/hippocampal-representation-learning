@@ -13,7 +13,7 @@ dependencies = [
     "nbformat==5.10.4",
     "nbclient==0.10.2",
     "ipykernel==6.30.1",
-    "jupyterlab==4.4.9",
+    "notebook==7.4.7",
     "playwright==1.55.0",
 ]
 
