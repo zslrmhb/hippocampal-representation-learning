@@ -1,0 +1,5 @@
+target,model,current_ba,slide_ba,slide_window_ms,slide_configuration,n_rat
+odor,cebra_combined_mean,0.48375,0.46,500,Historical wavelet CEBRA (separate configuration),4
+odor,historical_anchor,0.4888293650793651,0.489,500,Historical amplitude + L1,4
+position,cebra_combined_mean,0.30319444444444443,0.287,200,Historical wavelet CEBRA (separate configuration),4
+position,historical_anchor,0.40035714285714286,0.4,500,Historical amplitude + L1,4

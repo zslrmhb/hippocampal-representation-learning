@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hippocampal representation learning · {{ 'Poster wireframe' if wireframe else 'Poster results' }}</title>
+<style>
+@page { size: A3 landscape; margin: 0; }
+:root { --ink:#18322e; --muted:#405c55; --accent:#176654; --line:#ccdcd4; --pale:#edf5f0; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--ink); background:#eaf0ed; font:18px/1.32 Arial,sans-serif; }
+a { color:var(--accent); text-underline-offset:.15em; }
+.poster,.supplement { width:min(100%,420mm); margin:auto; background:#fff; }
+.poster { min-height:296mm; padding:30px 38px 20px; display:flex; flex-direction:column; }
+header { border-bottom:3px solid var(--accent); padding-bottom:16px; margin-bottom:18px; }
+.kicker,.eyebrow { font-weight:bold; letter-spacing:.09em; text-transform:uppercase; font-size:14px; color:var(--accent); }
+h1 { font-size:47px; line-height:1.06; letter-spacing:-.025em; margin:5px 0 8px; }
+h2 { margin:0 0 7px; font-size:25px; line-height:1.12; }
+h3 { margin:0 0 5px; font-size:19px; }
+p { margin:0 0 8px; }
+.authors { color:var(--muted); font-size:16px; }
+.lead { font-size:24px; font-weight:bold; margin-bottom:0; max-width:60em; }
+main { display:grid; grid-template-columns:minmax(0,24fr) minmax(0,48fr) minmax(0,28fr); gap:24px; align-items:start; }
+.column { display:grid; gap:17px; min-width:0; }
+section { min-width:0; break-inside:avoid; }
+.eyebrow { margin-bottom:5px; }
+.note,.sources,figcaption { font-size:14px; line-height:1.32; color:var(--muted); }
+.sources { margin:8px 0 0; }
+.small { font-size:16px; }
+.steps { margin:10px 0; padding-left:24px; }
+.steps li { padding:0 0 8px 4px; }
+.rule { border-top:1px solid var(--line); padding-top:12px; }
+.hero { background:var(--pale); border-top:4px solid var(--accent); padding:14px 16px; }
+.score-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(70px,2fr) 4.2rem 6rem; column-gap:7px; align-items:center; }
+.score-head { font-size:13px; line-height:1.18; color:var(--muted); }
+.score-target { grid-column:1/-1; font-size:18px; margin-top:9px; }
+.score-model { font-size:15px; padding:4px 0; }
+.score-value { text-align:right; font-variant-numeric:tabular-nums; }
+.score-track { position:relative; height:15px; border-left:1px solid var(--muted); background:#e0ede6; }
+.score-track::after { content:''; position:absolute; top:-4px; bottom:-4px; left:var(--chance); border-left:1px dashed #344f46; }
+.score-bar { display:block; height:100%; width:var(--score); background:#14725d; }
+.score-bar.cebra { background:#647893; }
+.score-axis { grid-column:2; display:flex; justify-content:space-between; position:relative; font-size:12px; color:var(--muted); }
+.score-axis .chance { position:absolute; left:var(--chance); transform:translateX(-50%); }
+table { border-collapse:collapse; width:100%; font-size:15px; font-variant-numeric:tabular-nums; }
+th,td { padding:3px 5px; border-bottom:1px solid var(--line); text-align:left; }
+th.n,td.n { text-align:right; white-space:nowrap; }
+.better { color:#08624e; }
+.worse { color:#923a2d; }
+.group-start td { border-top:2px solid #acc5b7; }
+.result-callout { margin:9px 0 0; padding:7px 10px; border-left:3px solid var(--accent); background:var(--pale); }
+.grids,.latent { display:grid; gap:8px; }
+.grids { grid-template-columns:repeat(2,minmax(0,1fr)); margin-bottom:6px; }
+figure { margin:0; min-width:0; }
+figure svg { width:100%; display:block; }
+.heat-scale { display:flex; align-items:center; gap:7px; margin-bottom:7px; font-size:13px; color:var(--muted); }
+.heat-scale i { width:66px; height:9px; background:linear-gradient(90deg,hsl(161 55% 96%),hsl(161 55% 31%)); border:1px solid var(--line); }
+.blank { display:grid; place-items:center; border:2px dashed #a5bfb1; min-height:var(--height); padding:10px; margin:7px 0; color:var(--muted); background:#f3f8f5; text-align:center; font-size:15px; }
+footer { margin-top:auto; padding-top:13px; display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:14px; }
+.supplement { padding:18px 38px 30px; border-top:2px solid var(--line); }
+details { margin-top:12px; border:1px solid var(--line); padding:10px 12px; }
+summary { cursor:pointer; font-weight:bold; }
+.table-scroll { overflow-x:auto; }
+.latent { grid-template-columns:repeat(5,minmax(0,1fr)); margin:6px 0 12px; }
+.latent figure { padding:3px; border:1px solid var(--line); text-align:center; }
+.latent svg { height:80px; }
+@media screen and (max-width:1080px) {
+  main { grid-template-columns:minmax(0,1fr); }
+  .poster { min-height:0; }
+  h1 { font-size:36px; }
+  .poster,.supplement { padding:20px; }
+  .grids svg { max-height:150px; }
+}
+@media screen and (max-width:560px) {
+  .score-grid { grid-template-columns:minmax(0,1.15fr) minmax(50px,1fr) 3.1rem 4rem; gap:4px; }
+  .score-model,.score-value { font-size:13px; }
+  .score-head { font-size:11px; }
+  .latent { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  footer { flex-direction:column; overflow-wrap:anywhere; }
+}
+@media print {
+  body { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+  .supplement,.screen-only { display:none; }
+}
+</style>
+</head>
+<body>
+{% macro cite(section) %}
+<p class="sources">Evidence: {% for label, path in sources[section] %}<a href="{{ source_url(path) }}">{{ label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+{% endmacro %}
+{% macro blank(text, height) %}<div class="blank" style="--height:{{ height }}px">{{ text }}</div>{% endmacro %}
+{% macro change(v) %}{% set value = v|round(1) %}<td class="n {{ 'worse' if value < 0 else 'better' if value > 0 else '' }}">{{ '%+.1f'|format(value) if value else '0.0' }}</td>{% endmacro %}
+<article class="poster">
+<header>
+<div class="kicker">{{ 'Poster wireframe' if wireframe else 'Five-rat study · 500 ms after odor onset' }}</div>
+<h1>Decoding odor and sequence position in the hippocampus</h1>
+<p class="authors">Project team: Hongbin Miao, Jessica Wu, Julia Eng, Jichuan Wu, Wonjae Lee, and Anthony Ko</p>
+<p class="lead">{% if wireframe %}State the test result in one sentence. Distinguish performance from what the model learned.{% else %}Wavelet amplitude led on position; odor scores were nearly tied on test.{% endif %}</p>
+</header>
+<main>
+<div class="column">
+<section>
+<div class="eyebrow">01 · Study design</div>
+<h2>Can learned features improve decoding?</h2>
+<p class="small">We compared direct signal features with learned features from hippocampal local field potentials.</p>
+<ol class="steps small">
+<li><strong>Align to odor onset.</strong> Match recordings and behavior in the first 500 ms.</li>
+<li><strong>Split by time within each rat.</strong> 70% training, 15% validation, 15% test. Reject invalid or boundary-crossing windows.</li>
+<li><strong>Compare inputs on the same trials.</strong> Filter 60 Hz noise, then fit a sparse logistic regression for each input separately within each rat:</li>
+</ol>
+<p class="small"><strong>Direct wavelet amplitude:</strong> summarize signal strength by frequency in ten 50 ms bins.</p>
+<p class="small"><strong>Wavelet CEBRA-Time:</strong> learn eight features from wavelet amplitude and phase using nearby time samples.</p>
+</section>
+<section class="rule">
+<h3>Two prediction tasks</h3>
+<p class="small"><strong>Odor (A–E):</strong> correct trials where the odor appeared in sequence.</p>
+<p class="small"><strong>Sequence position (1–5):</strong> also includes correct out-of-sequence trials. Position is order, not location.</p>
+{{ cite('methods') }}
+</section>
+</div>
+<div class="column">
+<section class="hero">
+<div class="eyebrow">02 · Main result</div>
+<h2>{% if wireframe %}Show the fixed-model comparison{% else %}Amplitude led on position, not by much on odor{% endif %}</h2>
+{% if wireframe %}{{ blank('Two sets of horizontal bars with a shared zero-based scale. Label strict test scores directly; put validation scores alongside.', 205) }}
+{% else %}
+<div class="score-grid" style="--chance:{{ 2000/score_limit }}%" role="group" aria-label="Five-class balanced accuracy by input, target and split">
+<span></span><strong class="score-head">Test balanced accuracy · 4 rats</strong><span></span><strong class="score-head score-value">Validation<br>5 rats</strong>
+{% for panel in headline %}
+<strong class="score-target">{{ panel.target }}</strong>
+{% for row in panel.rows %}
+<span class="score-model">{{ row.model }}</span>
+<span class="score-track" aria-hidden="true"><span class="score-bar {{ 'cebra' if loop.last else '' }}" style="--score:{{ 10000*row.test/score_limit }}%"></span></span>
+<strong class="score-value">{{ '%.1f%%'|format(100*row.test) }}</strong>
+<span class="score-value">{{ '%.1f%%'|format(100*row.validation) }}</span>
+{% endfor %}
+{% endfor %}
+<div class="score-axis" aria-hidden="true"><span>0%</span><span class="chance">20% chance</span><span>{{ score_limit }}%</span></div>
+</div>
+{% endif %}
+<p class="note result-callout">Average recall across the five classes within each rat, then weight rats equally. Buchanan lacks a test class. The previously viewed test is descriptive, not independent confirmation.</p>
+{{ cite('scores') }}
+</section>
+<section class="rule">
+<div class="eyebrow">03 · What test predictions can tell us</div>
+<h2>{% if wireframe %}Test whether predictions follow actual position{% else %}The test does not establish odor-independent position decoding{% endif %}</h2>
+<p class="small">If odor C usually occurs third but appears fifth, predicting 5 follows <strong>actual position</strong>; predicting 3 follows <strong>usual position</strong>.</p>
+{% if wireframe %}{{ blank('Count actual, usual, and other predictions on these mismatched trials. Show test first and validation second.', 100) }}
+{% else %}
+<div class="table-scroll" tabindex="0" aria-label="Predictions on mismatched trials"><table class="mismatch"><thead><tr><th>Split</th><th>Position model input</th><th class="n">Actual</th><th class="n">Usual</th><th class="n">Other</th><th class="n">Total</th></tr></thead><tbody>
+{% for row in outseq %}<tr{{ ' class=group-start' if loop.index == 3 else '' }}><td>{{ row.split_label }}</td><td>{{ row.label }}</td><td class="n">{{ row.follows_actual }}</td><td class="n">{{ row.follows_usual }}</td><td class="n">{{ row.neither }}</td><td class="n">{{ row.n }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+<p class="note">These counts pool correct out-of-sequence trials where the two positions differ. {% if not wireframe %}The validation pattern did not hold on the small test subset. An independent test with more mismatched trials is needed.{% endif %}</p>
+{{ cite('outseq') }}
+</section>
+</div>
+<div class="column">
+<section>
+<div class="eyebrow">04 · Validation masking</div>
+<h2>{% if wireframe %}Show the clearest masking result{% else %}Masking 4–11 Hz hurt decoding{% endif %}</h2>
+<p class="small">Replace the frequency group with its training mean and score the same model again. <strong><span class="worse">− worse</span> · <span class="better">+ better</span></strong> after masking.</p>
+{% if wireframe %}{{ blank('Balanced accuracy change for the selected group. Show each rat and the mean.', 150) }}
+{% else %}
+<table class="low-band"><thead><tr><th>4–11 Hz</th>{% for row in low_band %}<th class="n">{{ row.target }}</th>{% endfor %}</tr></thead><tbody>
+{% for rat in rats %}{% set i = loop.index0 %}<tr><td>{{ rat }}</td>{% for row in low_band %}{{ change(row['values'][i]) }}{% endfor %}</tr>{% endfor %}
+<tr class="group-start"><td><strong>Mean</strong></td>{% for row in low_band %}{{ change(row.mean) }}{% endfor %}</tr>
+</tbody></table>
+{% endif %}
+<p class="note">Validation balanced accuracy change in percentage points. Masking measures model sensitivity, not cause. Other frequency and time groups are in the interpretation notebook.</p>
+</section>
+<section class="rule">
+<div class="eyebrow">05 · Training coefficients</div>
+<h2>Where did the amplitude model put weight?</h2>
+{% if wireframe %}{{ blank('Two heatmaps: frequency by time. Keep a single color scale, plain axis labels, and a short explanation.', 104) }}
+{% else %}
+<div class="grids">
+{% for key, title in targets.items() %}
+<figure><h3>{{ title }}</h3><svg viewBox="0 0 182 114" role="img" aria-label="{{ title }} coefficient magnitudes by frequency and time">
+{% for row in cells[key] %}{% set y = loop.index0 %}{% for level in row %}<rect x="{{ 38+loop.index0*13.5 }}" y="{{ 5+y*7 }}" width="13" height="6.5" fill="hsl(161 55% {{ 96-level*0.65 }}%)"/>{% endfor %}{% endfor %}
+<g fill="#29453e" font-size="11"><text x="0" y="12">150 Hz</text><text x="13" y="88">4 Hz</text><text x="38" y="103">0</text><text x="90" y="103">250</text><text x="139" y="103">500 ms</text></g></svg></figure>
+{% endfor %}
+</div>
+<div class="heat-scale"><span>0</span><i aria-hidden="true"></i><span>{{ '%.3f'|format(maximum) }} mean magnitude</span></div>
+{% endif %}
+<p class="note">Time is measured from odor onset. Darker cells show larger absolute weights after class centering and averaging over channels, classes, and rats—not better decoding.</p>
+{{ cite('interpretation') }}
+<p class="sources screen-only"><a href="#supplement">Explore all masking groups and the five-rat CEBRA-Time projections below.</a></p>
+</section>
+</div>
+</main>
+<footer><span>Recordings: <a href="https://doi.org/10.1038/s41467-022-28057-6">Shahbaba et al. (2022)</a> · CEBRA: <a href="https://doi.org/10.1038/s41586-023-06031-6">Schneider et al. (2023)</a></span><span><a href="{{ source_url('poster/README.md') }}">Poster guide</a> · <a href="{{ repo }}">github.com/zslrmhb/hippocampal-representation-learning</a></span></footer>
+</article>
+<aside class="supplement" id="supplement" aria-labelledby="supplement-heading">
+<h2 id="supplement-heading">Online supplement · all-rat interpretation</h2>
+{% if wireframe %}<p>Put the full masking table and per-rat learned-feature projections here or in the linked notebook, not on the printed poster.</p>
+{% else %}
+<details>
+<summary>All frequency and time masks</summary>
+<p class="note">Validation balanced accuracy change in percentage points. <strong><span class="worse">− worse</span> · <span class="better">+ better</span></strong> after masking.</p>
+<div class="table-scroll" tabindex="0" aria-label="Per-rat validation masking results"><table class="mask"><thead><tr><th>Target</th><th>Masked group</th>{% for rat in rats %}<th class="n">{{ rat }}</th>{% endfor %}<th class="n">Mean</th></tr></thead><tbody>
+{% for row in masking %}<tr{{ ' class=group-start' if loop.index == 6 else '' }}><td>{{ row.target if loop.index0 % 5 == 0 else '' }}</td><td>{{ row.group }}</td>{% for v in row['values'] + [row.mean] %}{{ change(v) }}{% endfor %}</tr>{% endfor %}
+</tbody></table></div>
+</details>
+<details>
+<summary>CEBRA-Time validation projections for all five rats</summary>
+<p class="note">Each labeled dot is a validation class center, not one trial. The two principal components are fit separately on training data for each rat and target. Scales differ by panel, and this is not a measure of separation.</p>
+{% for t, charts in scatter.items() %}
+<h3>{{ targets[t] }} encoder · grouped by {{ t }}</h3>
+<div class="latent">
+{% for chart in charts %}<figure><figcaption><strong>{{ chart.rat }}</strong> · {{ chart.n }} trials · {{ chart.variance }}% variance captured</figcaption>
+<svg viewBox="0 0 98 68" role="img" aria-label="{{ chart.rat }} {{ t }} validation class centers"><path d="M9 35H89 M49 10V60" fill="none" stroke="#adc6bd" stroke-dasharray="2 2"/>
+{% for p in chart.points %}<circle cx="{{ p.x }}" cy="{{ p.y }}" r="5.5" fill="{{ p.color }}" stroke="white"><title>{{ p.label }} · {{ p.n }} trials</title></circle><text x="{{ p.x }}" y="{{ p.y+2.5 }}" fill="white" text-anchor="middle" font-size="7" font-weight="bold">{{ p.label }}</text>{% endfor %}
+</svg></figure>{% endfor %}
+</div>
+{% endfor %}
+</details>
+{% endif %}
+{{ cite('interpretation') }}
+</aside>
+</body>
+</html>

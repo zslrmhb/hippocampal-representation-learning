@@ -1,0 +1,21 @@
+{
+  "schema": "poster-replay-code-v5",
+  "reviewed_spec_sha256": "4e81424fafb56e8f36d9aab22a08961fbe8535994b7995fcef95fc5eb198f8d2",
+  "code": {
+    "pyproject.toml": "d9833f7b6408e73a22369138db59d52469ad59120492237e531ee19c8b4d63f5",
+    "src/data_processing/artifacts.py": "86872260d940c2897e6782441cca21d0668679bd2437731b7562a2da81d3727b",
+    "src/data_processing/preprocess.py": "ee5e0f737c87f76d342ed3197bcf1ff5ce0b1cb7eaac891713cede874576f2de",
+    "src/data_processing/storage.py": "47af8d5373388e88a10c9f93dc5a97c7189f9db5638b6978254e5a39f194d9b3",
+    "src/data_processing/vendor/__init__.py": "2f2116e93a0a354a2e75369a1e2cf1b7aeec5902c125a355574e7404a115bc1a",
+    "src/data_processing/vendor/events.py": "2f6c5f1091aeb1a4578054f4112e20ecf604ef3c8caddd34a88ae75de5043034",
+    "src/data_processing/vendor/filtering.py": "cb06b8d7a8cdcdbd5ad7efc42621b0a6888e6b2b14f594f5e3aa9f4a78d2cc63",
+    "src/data_processing/vendor/io.py": "1f377ea6ad90dc7c0e7755756dcb21d6b4891dfd32360970d417a4236da6dd46",
+    "src/data_processing/vendor/quality.py": "5da2c5f14cd0eb0a4270b18c3a0b6d5443b8595d349248c01ae296fe0d69897b",
+    "src/evaluation/interpretability.py": "5c28b909bbabeecd6a5a39e7ebbd85e0622a69f85b58c38c2df636b1fa4627ec",
+    "src/evaluation/metrics.py": "441994d79a60eb60f11171943ca9c9bf2ccbfb171696a90e9ae6b745aefef7e7",
+    "src/evaluation/replay.py": "7cc0c5d85808c3b3b145b84d7c46ab6a0caf4f738d337a11c2a5479008b2ff43",
+    "src/modeling/design.py": "e8bce7753522c8dd7fb157a0d517ad0859f821b01345de2583a199a89ac1f344",
+    "src/modeling/models.py": "6b9295c74106f27af4f335b369d02ffa48e4b9923e8097960859c194dd84de83",
+    "uv.lock": "ede221cce0b17022c361b45efd2ccb4e80f4b4b9ddffe16fb8135abb94b470c5"
+  }
+}
