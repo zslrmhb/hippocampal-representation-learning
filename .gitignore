@@ -1,5 +1,6 @@
 # Python environment
 .venv/
+/.venv-replay/
 __pycache__/
 *.py[cod]
 
@@ -10,6 +11,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
+# Local assistant settings
+/.omp/
+
 # OS / editor
 .DS_Store
 .idea/
@@ -19,10 +23,18 @@ __pycache__/
 .env.*
 !.env.example
 
-# Datasets (keep placeholder)
-data/*
-!data/.gitkeep
+# Local recordings and processed data; keep only the placeholder by default.
+/data/*
+!/data/.gitkeep
 
 # Generated outputs
 results/*
 !results/.gitkeep
+poster_assets/
+poster_assets.zip
+/ablation_results/
+/ablation_review_*.zip
+/Presentation 2 (Week 8) (1).pdf
+
+# Local full-study source and exploratory workflows
+/.research-archive/
