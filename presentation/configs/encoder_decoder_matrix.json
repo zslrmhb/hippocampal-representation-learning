@@ -1,0 +1,1526 @@
+{
+  "id": "rat-pair-matrix-v1",
+  "targets": [
+    "odor",
+    "position"
+  ],
+  "sessions": [
+    "080718_mitt",
+    "081106_barat",
+    "090212_stella",
+    "090212_superchris",
+    "090420_buchanan"
+  ],
+  "aliases": [
+    "Mitt",
+    "Barat",
+    "Stella",
+    "Superchris",
+    "Buchanan"
+  ],
+  "window_ms": [
+    0,
+    500
+  ],
+  "sample_rate_hz": 1000,
+  "classes": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "split": {
+    "chronology": [
+      0.7,
+      0.15,
+      0.15
+    ],
+    "intersect_clean_timestamp_blocks": true,
+    "fit": "train",
+    "select": "val",
+    "test": "previously viewed retrospective"
+  },
+  "qa": {
+    "artifact_multiplier": 20,
+    "flatline_ms": 100,
+    "notch_hz": 60,
+    "notch_q": 30,
+    "notch_guard_samples": 2199,
+    "common_guard_samples": 2677,
+    "morlet_frequencies": 12
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "decoders": [
+    "linear_l1",
+    "linear_l2",
+    "cosine_3nn",
+    "shrinkage_lda",
+    "rbf_svm",
+    "hist_boost",
+    "xgboost",
+    "lightgbm",
+    "ridge",
+    "random_forest",
+    "extra_trees",
+    "gaussian_nb",
+    "gaussian_process"
+  ],
+  "fixed_decoders": [
+    "cosine_3nn",
+    "shrinkage_lda"
+  ],
+  "stochastic_readouts": [
+    "linear_l1",
+    "random_forest",
+    "extra_trees"
+  ],
+  "archived_encoders": [
+    "cebra_combined_mean",
+    "continuous_jepa",
+    "continuous_infonce",
+    "continuous_random_frozen"
+  ],
+  "alternative_encoder_seeds": [
+    "cebra_combined_mean",
+    "continuous_jepa",
+    "continuous_infonce",
+    "continuous_random_frozen",
+    "minirocket"
+  ],
+  "encoders": [
+    {
+      "id": "amp_bin50",
+      "input_view": "amplitude",
+      "encoder_fit_support": "TRAIN amplitude scaler only",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn"
+      ],
+      "config": {
+        "bin_ms": 50,
+        "bins": 10
+      }
+    },
+    {
+      "id": "amp_mean",
+      "input_view": "amplitude",
+      "encoder_fit_support": "TRAIN amplitude scaler only",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn",
+        "shrinkage_lda",
+        "rbf_svm",
+        "hist_boost",
+        "xgboost",
+        "lightgbm",
+        "random_forest",
+        "extra_trees",
+        "gaussian_nb",
+        "gaussian_process"
+      ],
+      "config": {
+        "mean_ms": 500
+      }
+    },
+    {
+      "id": "voltage_bin50",
+      "input_view": "signed_voltage",
+      "encoder_fit_support": "unique TRAIN source samples",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn"
+      ],
+      "config": {
+        "bin_ms": 50,
+        "bins": 10
+      }
+    },
+    {
+      "id": "wave_cov",
+      "input_view": "unscaled_amplitude_and_cos_phase",
+      "encoder_fit_support": "per-trial covariance; no across-trial fit",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn"
+      ],
+      "config": {
+        "bands": [
+          2,
+          6,
+          9
+        ],
+        "covariance": "LedoitWolf",
+        "geometry": "log_euclidean"
+      }
+    },
+    {
+      "id": "grf025",
+      "input_view": "amplitude",
+      "encoder_fit_support": "TRAIN amplitude scaler only",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn"
+      ],
+      "config": {
+        "lambda": 0.25,
+        "bin_ms": 50
+      }
+    },
+    {
+      "id": "grf100",
+      "input_view": "amplitude",
+      "encoder_fit_support": "TRAIN amplitude scaler only",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn"
+      ],
+      "config": {
+        "lambda": 1,
+        "bin_ms": 50
+      }
+    },
+    {
+      "id": "cebra_combined_mean",
+      "input_view": "amplitude_plus_phase",
+      "encoder_fit_support": "archived TRAIN-only time encoder",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn",
+        "shrinkage_lda",
+        "rbf_svm",
+        "hist_boost",
+        "xgboost",
+        "lightgbm",
+        "random_forest",
+        "extra_trees",
+        "gaussian_nb",
+        "gaussian_process"
+      ],
+      "config": {
+        "architecture": "offset10-model",
+        "steps": 1000,
+        "width": 8,
+        "pooling": "mean_valid_centers"
+      }
+    },
+    {
+      "id": "continuous_jepa",
+      "input_view": "amplitude",
+      "encoder_fit_support": "archived additional clean TRAIN continuous support",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn"
+      ],
+      "config": {
+        "architecture": "continuous_cnn",
+        "objective": "jepa",
+        "width": 12,
+        "bin_ms": 50
+      }
+    },
+    {
+      "id": "continuous_infonce",
+      "input_view": "amplitude",
+      "encoder_fit_support": "archived additional clean TRAIN continuous support",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn"
+      ],
+      "config": {
+        "architecture": "continuous_cnn",
+        "objective": "infonce",
+        "width": 12,
+        "bin_ms": 50
+      }
+    },
+    {
+      "id": "continuous_random_frozen",
+      "input_view": "amplitude",
+      "encoder_fit_support": "archived initialization; TRAIN amplitude scaler",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "cosine_3nn"
+      ],
+      "config": {
+        "architecture": "continuous_cnn",
+        "objective": "random_frozen",
+        "width": 12,
+        "bin_ms": 50
+      }
+    },
+    {
+      "id": "pca08",
+      "input_view": "amplitude",
+      "encoder_fit_support": "TRAIN trials only",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "shrinkage_lda",
+        "rbf_svm"
+      ],
+      "config": {
+        "n_components": 8,
+        "svd_solver": "full",
+        "whiten": false
+      }
+    },
+    {
+      "id": "pca16",
+      "input_view": "amplitude",
+      "encoder_fit_support": "TRAIN trials only",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "shrinkage_lda",
+        "rbf_svm"
+      ],
+      "config": {
+        "n_components": 16,
+        "svd_solver": "full",
+        "whiten": false
+      }
+    },
+    {
+      "id": "pca32",
+      "input_view": "amplitude",
+      "encoder_fit_support": "TRAIN trials only",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "shrinkage_lda",
+        "rbf_svm"
+      ],
+      "config": {
+        "n_components": 32,
+        "svd_solver": "full",
+        "whiten": false
+      }
+    },
+    {
+      "id": "minirocket",
+      "input_view": "amplitude",
+      "encoder_fit_support": "TRAIN trials only",
+      "decoders": [
+        "linear_l2",
+        "ridge"
+      ],
+      "config": {
+        "n_kernels": 840,
+        "max_dilations_per_kernel": 32,
+        "n_jobs": 1
+      }
+    },
+    {
+      "id": "wave_tangent",
+      "input_view": "unscaled_amplitude_and_cos_phase",
+      "encoder_fit_support": "TRAIN trials only; per-trial covariance",
+      "decoders": [
+        "linear_l1",
+        "linear_l2",
+        "shrinkage_lda",
+        "rbf_svm"
+      ],
+      "config": {
+        "bands": [
+          2,
+          6,
+          9
+        ],
+        "covariance": "LedoitWolf",
+        "relative_eig_floor": 1e-06,
+        "metric": "riemann",
+        "tsupdate": false
+      }
+    }
+  ],
+  "objective": {
+    "metric": "balanced_accuracy",
+    "aggregate": "equal_session_mean",
+    "round_decimals": 12,
+    "required_sessions": 5
+  },
+  "promotion": {
+    "min_delta": 0.02,
+    "min_strict_wins": 3,
+    "require_positive_leave_one_out": true,
+    "require_nonnegative_repeats": true,
+    "exclude": [
+      "continuous_random_frozen"
+    ]
+  },
+  "caps": {
+    "seed42_search_fits": 4280,
+    "historical_parity_fits": 10,
+    "evaluation_jobs": 3350
+  },
+  "archived_protocol_sha256": "338d15cb04753b6bc3d7d02699a600a58cd44827a3c90c50c51d6347a8dcda23",
+  "run_identity": "3c8cc4673a3919a6c1a6c778fe3df7ee43c18cf1eb769931676d77807ffd35c7",
+  "schedule_counts": {
+    "grid_slots": 390,
+    "scheduled": 132,
+    "fixed": 32,
+    "studies": 100,
+    "seed42_cap": 4280
+  },
+  "result_table": "../../poster/evidence/matrix.csv",
+  "result_table_sha256": "072acbb39310dd0b509e1cbb06b11cc126da7a193fdd8d28220539013f61de67",
+  "frozen_decoder_settings": "encoder_decoder_selection.json",
+  "feature_reconstruction_notes": {
+    "amplitude": "Use the 0–500 ms matched cohort and fixed training amplitude scaling from ablation.json. Pool over ten 50 ms bins (amp_bin50, PCA, GRF, continuous encoders) or over the whole window (amp_mean); flatten bin-major for the readouts apart from the temporal encoders.",
+    "voltage": "At each channel standardize on unique matched training samples, then mean-pool over ten 50 ms bins.",
+    "wavelet_covariance": "At zero-based frequency indices 2, 6, and 9 use unscaled exp(log amplitude) times cosine phase. Fit Ledoit–Wolf per trial and band over time, flooring eigenvalues at 1e-6 times the maximum eigenvalue. Log-Euclidean: vectorize diagonal and sqrt(2)-weighted upper triangle. Tangent: use a separate training-fitted Riemannian reference per band, then concatenate.",
+    "grf": "For each trial and electrode solve (1.01 I + lambda L) x = standardized binned amplitude, with L the four-neighbor 10-by-12 time-frequency grid Laplacian.",
+    "minirocket": "Use the unpooled standardized amplitude in trial-by-feature-by-time order.",
+    "cebra": "Archived 500 ms wavelet encoder uses the 1000-update CEBRA recipe in ablation.json; average over valid receptive-field centers.",
+    "available_encoder_seeds": {
+      "cebra_combined_mean_odor": [42, 43, 44],
+      "cebra_combined_mean_position": [42],
+      "continuous_jepa": [42, 43],
+      "continuous_infonce": [42, 43],
+      "continuous_random_frozen": [42],
+      "minirocket": [42, 43, 44],
+      "other": [42]
+    }
+  },
+  "continuous_encoder_archive": {
+    "run": "poster-continuous-transfer-20261120",
+    "manifest_sha256": "64190520dbeffd4aca4eadc50c02ee7441b87c03485d74329a310e135119971e",
+    "training_device": "CUDA",
+    "support": "Adjacent disjoint 5854-sample context and target spans, each a 500-sample crop with 2677 samples of guard on either side. Use only clean contiguous training blocks; enumerate pairs in recording order, at most 256 evenly selected; minimum 32 pairs.",
+    "encoder": "Linear projection to 32, GELU, padded 32→32 temporal convolution (kernel 3), residual and LayerNorm, GELU, linear 32→12, then mean over ten bins.",
+    "predictor": "Linear 12→32, GELU, linear 32→12, used only during training.",
+    "optimizer": "AdamW",
+    "updates": 512,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "teacher_ema": 0.99,
+    "objectives": {
+      "continuous_jepa": "MSE to the stopped teacher target plus 0.1 times mean ReLU(0.5 minus context-latent SD).",
+      "continuous_infonce": "Cross-entropy for matching context and target within the batch, on cosine logits at temperature 0.2.",
+      "continuous_random_frozen": "Seeded random initialization; no update."
+    },
+    "matrix_use": "Reuse authorized frozen weights; the matrix did not retrain these encoders."
+  },
+  "recommendations": {
+    "odor": "odor/amp_mean/hist_boost",
+    "position": "position/wave_tangent/rbf_svm"
+  },
+  "decoder_search": {
+    "linear_l1": {
+      "budget": 5,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "C": 0.001
+        },
+        {
+          "C": 0.01
+        },
+        {
+          "C": 0.1
+        },
+        {
+          "C": 1.0
+        },
+        {
+          "C": 10.0
+        }
+      ],
+      "head_seed": 42,
+      "kind": "enumerated",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "RandomSampler"
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "choices": [
+            0.001,
+            0.01,
+            0.1,
+            1.0,
+            10.0
+          ],
+          "method": "categorical",
+          "name": "C"
+        }
+      ]
+    },
+    "linear_l2": {
+      "budget": 5,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "C": 0.001
+        },
+        {
+          "C": 0.01
+        },
+        {
+          "C": 0.1
+        },
+        {
+          "C": 1.0
+        },
+        {
+          "C": 10.0
+        }
+      ],
+      "head_seed": 42,
+      "kind": "enumerated",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "RandomSampler"
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "choices": [
+            0.001,
+            0.01,
+            0.1,
+            1.0,
+            10.0
+          ],
+          "method": "categorical",
+          "name": "C"
+        }
+      ]
+    },
+    "cosine_3nn": null,
+    "shrinkage_lda": null,
+    "rbf_svm": {
+      "budget": 16,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "C": 0.1,
+          "gamma_multiplier": 1.0
+        },
+        {
+          "C": 1.0,
+          "gamma_multiplier": 1.0
+        },
+        {
+          "C": 10.0,
+          "gamma_multiplier": 1.0
+        }
+      ],
+      "head_seed": 42,
+      "kind": "tpe",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "TPESampler",
+        "multivariate": false,
+        "n_ei_candidates": 24,
+        "n_startup_trials": 6
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "high": 100.0,
+          "log": true,
+          "low": 0.01,
+          "method": "float",
+          "name": "C"
+        },
+        {
+          "high": 30.0,
+          "log": true,
+          "low": 0.03,
+          "method": "float",
+          "name": "gamma_multiplier"
+        }
+      ]
+    },
+    "hist_boost": {
+      "budget": 16,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "complexity": "leaves",
+          "l2_regularization": 0.1,
+          "learning_rate": 0.08,
+          "max_iter": 100,
+          "max_leaf_nodes": 7,
+          "min_samples_leaf": 10
+        },
+        {
+          "complexity": "leaves",
+          "l2_regularization": 0.1,
+          "learning_rate": 0.08,
+          "max_iter": 100,
+          "max_leaf_nodes": 15,
+          "min_samples_leaf": 15
+        }
+      ],
+      "head_seed": 42,
+      "kind": "tpe",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "TPESampler",
+        "multivariate": false,
+        "n_ei_candidates": 24,
+        "n_startup_trials": 6
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "high": 0.2,
+          "log": true,
+          "low": 0.02,
+          "method": "float",
+          "name": "learning_rate"
+        },
+        {
+          "high": 200,
+          "low": 40,
+          "method": "int",
+          "name": "max_iter",
+          "step": 20
+        },
+        {
+          "high": 25,
+          "low": 5,
+          "method": "int",
+          "name": "min_samples_leaf"
+        },
+        {
+          "high": 10.0,
+          "log": true,
+          "low": 0.001,
+          "method": "float",
+          "name": "l2_regularization"
+        },
+        {
+          "choices": [
+            "depth",
+            "leaves"
+          ],
+          "method": "categorical",
+          "name": "complexity"
+        },
+        {
+          "high": 5,
+          "low": 2,
+          "method": "int",
+          "name": "max_depth",
+          "when": [
+            "complexity",
+            "depth"
+          ]
+        },
+        {
+          "high": 24,
+          "low": 4,
+          "method": "int",
+          "name": "max_leaf_nodes",
+          "when": [
+            "complexity",
+            "leaves"
+          ]
+        }
+      ]
+    },
+    "xgboost": {
+      "budget": 16,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "learning_rate": 0.08,
+          "max_depth": 2,
+          "min_child_weight": 5,
+          "n_estimators": 100,
+          "reg_lambda": 1.0
+        },
+        {
+          "learning_rate": 0.08,
+          "max_depth": 3,
+          "min_child_weight": 5,
+          "n_estimators": 100,
+          "reg_lambda": 1.0
+        }
+      ],
+      "head_seed": 42,
+      "kind": "tpe",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "TPESampler",
+        "multivariate": false,
+        "n_ei_candidates": 24,
+        "n_startup_trials": 6
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "high": 4,
+          "low": 2,
+          "method": "int",
+          "name": "max_depth"
+        },
+        {
+          "high": 10,
+          "low": 2,
+          "method": "int",
+          "name": "min_child_weight"
+        },
+        {
+          "high": 0.2,
+          "log": true,
+          "low": 0.02,
+          "method": "float",
+          "name": "learning_rate"
+        },
+        {
+          "high": 200,
+          "low": 40,
+          "method": "int",
+          "name": "n_estimators",
+          "step": 20
+        },
+        {
+          "high": 10.0,
+          "log": true,
+          "low": 0.01,
+          "method": "float",
+          "name": "reg_lambda"
+        }
+      ]
+    },
+    "lightgbm": {
+      "budget": 16,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "learning_rate": 0.08,
+          "max_depth": 2,
+          "min_child_samples": 15,
+          "n_estimators": 100,
+          "num_leaves_d2": 4,
+          "reg_lambda": 1.0
+        },
+        {
+          "learning_rate": 0.08,
+          "max_depth": 3,
+          "min_child_samples": 15,
+          "n_estimators": 100,
+          "num_leaves_d3": 8,
+          "reg_lambda": 1.0
+        }
+      ],
+      "head_seed": 42,
+      "kind": "tpe",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "TPESampler",
+        "multivariate": false,
+        "n_ei_candidates": 24,
+        "n_startup_trials": 6
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "high": 4,
+          "low": 2,
+          "method": "int",
+          "name": "max_depth"
+        },
+        {
+          "high": 4,
+          "low": 3,
+          "method": "int",
+          "name": "num_leaves_d2",
+          "when": [
+            "max_depth",
+            2
+          ]
+        },
+        {
+          "high": 8,
+          "low": 3,
+          "method": "int",
+          "name": "num_leaves_d3",
+          "when": [
+            "max_depth",
+            3
+          ]
+        },
+        {
+          "high": 16,
+          "low": 3,
+          "method": "int",
+          "name": "num_leaves_d4",
+          "when": [
+            "max_depth",
+            4
+          ]
+        },
+        {
+          "high": 25,
+          "low": 8,
+          "method": "int",
+          "name": "min_child_samples"
+        },
+        {
+          "high": 0.2,
+          "log": true,
+          "low": 0.02,
+          "method": "float",
+          "name": "learning_rate"
+        },
+        {
+          "high": 200,
+          "low": 40,
+          "method": "int",
+          "name": "n_estimators",
+          "step": 20
+        },
+        {
+          "high": 10.0,
+          "log": true,
+          "low": 0.01,
+          "method": "float",
+          "name": "reg_lambda"
+        }
+      ]
+    },
+    "ridge": {
+      "budget": 3,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "alpha": 0.1
+        },
+        {
+          "alpha": 1.0
+        },
+        {
+          "alpha": 10.0
+        }
+      ],
+      "head_seed": 42,
+      "kind": "enumerated",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "RandomSampler"
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "choices": [
+            0.1,
+            1.0,
+            10.0
+          ],
+          "method": "categorical",
+          "name": "alpha"
+        }
+      ]
+    },
+    "random_forest": {
+      "budget": 16,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "depth_mode": "bounded",
+          "max_depth": 4,
+          "max_features_mode": "sqrt",
+          "min_samples_leaf": 2,
+          "n_estimators": 192
+        },
+        {
+          "depth_mode": "unbounded",
+          "max_features_mode": "sqrt",
+          "min_samples_leaf": 4,
+          "n_estimators": 192
+        }
+      ],
+      "head_seed": 42,
+      "kind": "tpe",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "TPESampler",
+        "multivariate": false,
+        "n_ei_candidates": 24,
+        "n_startup_trials": 6
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "choices": [
+            128,
+            192,
+            256
+          ],
+          "method": "categorical",
+          "name": "n_estimators"
+        },
+        {
+          "choices": [
+            "bounded",
+            "unbounded"
+          ],
+          "method": "categorical",
+          "name": "depth_mode"
+        },
+        {
+          "high": 12,
+          "low": 2,
+          "method": "int",
+          "name": "max_depth",
+          "when": [
+            "depth_mode",
+            "bounded"
+          ]
+        },
+        {
+          "high": 12,
+          "low": 1,
+          "method": "int",
+          "name": "min_samples_leaf"
+        },
+        {
+          "choices": [
+            "sqrt",
+            "fraction"
+          ],
+          "method": "categorical",
+          "name": "max_features_mode"
+        },
+        {
+          "high": 0.8,
+          "low": 0.15,
+          "method": "float",
+          "name": "max_features_fraction",
+          "when": [
+            "max_features_mode",
+            "fraction"
+          ]
+        }
+      ]
+    },
+    "extra_trees": {
+      "budget": 16,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "depth_mode": "bounded",
+          "max_depth": 4,
+          "max_features_mode": "sqrt",
+          "min_samples_leaf": 2,
+          "n_estimators": 192
+        },
+        {
+          "depth_mode": "unbounded",
+          "max_features_mode": "sqrt",
+          "min_samples_leaf": 4,
+          "n_estimators": 192
+        }
+      ],
+      "head_seed": 42,
+      "kind": "tpe",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "TPESampler",
+        "multivariate": false,
+        "n_ei_candidates": 24,
+        "n_startup_trials": 6
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "choices": [
+            128,
+            192,
+            256
+          ],
+          "method": "categorical",
+          "name": "n_estimators"
+        },
+        {
+          "choices": [
+            "bounded",
+            "unbounded"
+          ],
+          "method": "categorical",
+          "name": "depth_mode"
+        },
+        {
+          "high": 12,
+          "low": 2,
+          "method": "int",
+          "name": "max_depth",
+          "when": [
+            "depth_mode",
+            "bounded"
+          ]
+        },
+        {
+          "high": 12,
+          "low": 1,
+          "method": "int",
+          "name": "min_samples_leaf"
+        },
+        {
+          "choices": [
+            "sqrt",
+            "fraction"
+          ],
+          "method": "categorical",
+          "name": "max_features_mode"
+        },
+        {
+          "high": 0.8,
+          "low": 0.15,
+          "method": "float",
+          "name": "max_features_fraction",
+          "when": [
+            "max_features_mode",
+            "fraction"
+          ]
+        }
+      ]
+    },
+    "gaussian_nb": {
+      "budget": 2,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "var_smoothing": 1e-09
+        },
+        {
+          "var_smoothing": 0.001
+        }
+      ],
+      "head_seed": 42,
+      "kind": "enumerated",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "RandomSampler"
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "choices": [
+            1e-09,
+            0.001
+          ],
+          "method": "categorical",
+          "name": "var_smoothing"
+        }
+      ]
+    },
+    "gaussian_process": {
+      "budget": 2,
+      "budget_counts": "all asked trials, including FAIL and PRUNED",
+      "direction": "maximize",
+      "enqueues": [
+        {
+          "length_multiplier": 0.5
+        },
+        {
+          "length_multiplier": 2.0
+        }
+      ],
+      "head_seed": 42,
+      "kind": "enumerated",
+      "objective": "arithmetic mean of exactly five within-session five-class validation balanced accuracies",
+      "optuna_version": "4.5.0",
+      "pruner": "NopPruner",
+      "sampler": {
+        "class": "RandomSampler"
+      },
+      "seed_rule": "uint32: first four big-endian SHA-256 bytes of rat-pair-matrix-v1|target|encoder|decoder|number|42",
+      "space": [
+        {
+          "choices": [
+            0.5,
+            2.0
+          ],
+          "method": "categorical",
+          "name": "length_multiplier"
+        }
+      ]
+    }
+  },
+  "decoder_defaults": {
+    "linear_l1": {
+      "class": "LogisticRegression",
+      "constructor": {
+        "penalty": "l1",
+        "dual": false,
+        "tol": 0.001,
+        "C": 1.0,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "class_weight": "balanced",
+        "random_state": 42,
+        "solver": "saga",
+        "max_iter": 2000,
+        "multi_class": "deprecated",
+        "verbose": 0,
+        "warm_start": false,
+        "n_jobs": null,
+        "l1_ratio": null
+      },
+      "scaler": {
+        "class": "StandardScaler",
+        "copy": true,
+        "with_mean": true,
+        "with_std": true
+      },
+      "train_dtype_override": "float32"
+    },
+    "linear_l2": {
+      "class": "LogisticRegression",
+      "constructor": {
+        "penalty": "l2",
+        "dual": false,
+        "tol": 0.0001,
+        "C": 1.0,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "class_weight": "balanced",
+        "random_state": null,
+        "solver": "lbfgs",
+        "max_iter": 2000,
+        "multi_class": "deprecated",
+        "verbose": 0,
+        "warm_start": false,
+        "n_jobs": null,
+        "l1_ratio": null
+      },
+      "scaler": {
+        "class": "StandardScaler",
+        "copy": true,
+        "with_mean": true,
+        "with_std": true
+      },
+      "train_dtype_override": null
+    },
+    "cosine_3nn": {
+      "class": "KNeighborsClassifier",
+      "constructor": {
+        "n_neighbors": 3,
+        "weights": "uniform",
+        "algorithm": "brute",
+        "leaf_size": 30,
+        "p": 2,
+        "metric": "cosine",
+        "metric_params": null,
+        "n_jobs": 1
+      },
+      "scaler": {
+        "class": "StandardScaler",
+        "copy": true,
+        "with_mean": true,
+        "with_std": true
+      },
+      "train_dtype_override": "float32"
+    },
+    "shrinkage_lda": {
+      "class": "LinearDiscriminantAnalysis",
+      "constructor": {
+        "solver": "lsqr",
+        "shrinkage": "auto",
+        "priors": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "n_components": null,
+        "store_covariance": false,
+        "tol": 0.0001,
+        "covariance_estimator": null
+      },
+      "scaler": {
+        "class": "StandardScaler",
+        "copy": true,
+        "with_mean": true,
+        "with_std": true
+      },
+      "train_dtype_override": null
+    },
+    "rbf_svm": {
+      "class": "SVC",
+      "constructor": {
+        "C": 1.0,
+        "kernel": "rbf",
+        "degree": 3,
+        "gamma": "scale",
+        "coef0": 0.0,
+        "shrinking": true,
+        "probability": false,
+        "tol": 0.001,
+        "cache_size": 200,
+        "class_weight": "balanced",
+        "verbose": false,
+        "max_iter": 10000,
+        "decision_function_shape": "ovr",
+        "break_ties": false,
+        "random_state": null
+      },
+      "scaler": {
+        "class": "StandardScaler",
+        "copy": true,
+        "with_mean": true,
+        "with_std": true
+      },
+      "train_dtype_override": null
+    },
+    "hist_boost": {
+      "class": "HistGradientBoostingClassifier",
+      "constructor": {
+        "loss": "log_loss",
+        "learning_rate": 0.1,
+        "max_iter": 100,
+        "max_leaf_nodes": 31,
+        "max_depth": null,
+        "min_samples_leaf": 20,
+        "l2_regularization": 0.0,
+        "max_features": 1.0,
+        "max_bins": 63,
+        "categorical_features": "from_dtype",
+        "monotonic_cst": null,
+        "interaction_cst": null,
+        "warm_start": false,
+        "early_stopping": false,
+        "scoring": "loss",
+        "validation_fraction": 0.1,
+        "n_iter_no_change": 10,
+        "tol": 1e-07,
+        "verbose": 0,
+        "random_state": 42,
+        "class_weight": "balanced"
+      },
+      "scaler": null,
+      "train_dtype_override": null
+    },
+    "xgboost": {
+      "class": "XGBClassifier",
+      "constructor": {
+        "objective": "multi:softprob",
+        "num_class": 5,
+        "tree_method": "hist",
+        "device": "cpu",
+        "booster": "gbtree",
+        "grow_policy": "depthwise",
+        "max_bin": 63,
+        "subsample": 1.0,
+        "colsample_bytree": 1.0,
+        "colsample_bylevel": 1.0,
+        "colsample_bynode": 1.0,
+        "min_split_loss": 0,
+        "reg_alpha": 0,
+        "n_jobs": 1,
+        "early_stopping_rounds": null,
+        "max_depth": 2,
+        "min_child_weight": 5,
+        "n_estimators": 100,
+        "learning_rate": 0.08,
+        "reg_lambda": 1.0,
+        "random_state": 42
+      },
+      "scaler": null,
+      "train_dtype_override": null,
+      "sample_weight": {
+        "method": "compute_sample_weight",
+        "class_weight": "balanced",
+        "split": "train"
+      },
+      "label_mapping": {
+        "estimator": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "canonical": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    "lightgbm": {
+      "class": "LGBMClassifier",
+      "constructor": {
+        "objective": "multiclass",
+        "num_class": 5,
+        "boosting_type": "gbdt",
+        "device_type": "cpu",
+        "deterministic": true,
+        "force_col_wise": true,
+        "max_bin": 63,
+        "subsample": 1.0,
+        "subsample_freq": 0,
+        "colsample_bytree": 1.0,
+        "reg_alpha": 0,
+        "verbosity": -1,
+        "n_jobs": 1,
+        "class_weight": null,
+        "max_depth": 2,
+        "num_leaves": 4,
+        "min_child_samples": 15,
+        "n_estimators": 100,
+        "learning_rate": 0.08,
+        "reg_lambda": 1.0,
+        "random_state": 42
+      },
+      "scaler": null,
+      "train_dtype_override": null,
+      "sample_weight": {
+        "method": "compute_sample_weight",
+        "class_weight": "balanced",
+        "split": "train"
+      }
+    },
+    "ridge": {
+      "class": "RidgeClassifier",
+      "constructor": {
+        "alpha": 1.0,
+        "class_weight": "balanced",
+        "solver": "svd",
+        "fit_intercept": true,
+        "copy_X": true,
+        "max_iter": null,
+        "tol": 0.0001,
+        "positive": false,
+        "random_state": null
+      },
+      "scaler": {
+        "class": "StandardScaler",
+        "copy": true,
+        "with_mean": true,
+        "with_std": true
+      },
+      "train_dtype_override": null
+    },
+    "random_forest": {
+      "class": "RandomForestClassifier",
+      "constructor": {
+        "n_estimators": 100,
+        "criterion": "gini",
+        "max_depth": null,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "min_weight_fraction_leaf": 0.0,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "min_impurity_decrease": 0.0,
+        "bootstrap": true,
+        "oob_score": false,
+        "n_jobs": 1,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false,
+        "class_weight": "balanced",
+        "ccp_alpha": 0.0,
+        "max_samples": null,
+        "monotonic_cst": null
+      },
+      "scaler": null,
+      "train_dtype_override": null
+    },
+    "extra_trees": {
+      "class": "ExtraTreesClassifier",
+      "constructor": {
+        "n_estimators": 100,
+        "criterion": "gini",
+        "max_depth": null,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "min_weight_fraction_leaf": 0.0,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "min_impurity_decrease": 0.0,
+        "bootstrap": false,
+        "oob_score": false,
+        "n_jobs": 1,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false,
+        "class_weight": "balanced",
+        "ccp_alpha": 0.0,
+        "max_samples": null,
+        "monotonic_cst": null
+      },
+      "scaler": null,
+      "train_dtype_override": null
+    },
+    "gaussian_nb": {
+      "class": "GaussianNB",
+      "constructor": {
+        "priors": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "var_smoothing": 1e-09
+      },
+      "scaler": {
+        "class": "StandardScaler",
+        "copy": true,
+        "with_mean": true,
+        "with_std": true
+      },
+      "train_dtype_override": null
+    },
+    "gaussian_process": {
+      "class": "GaussianProcessClassifier",
+      "constructor": {
+        "optimizer": null,
+        "n_restarts_optimizer": 0,
+        "max_iter_predict": 100,
+        "warm_start": false,
+        "copy_X_train": true,
+        "random_state": 42,
+        "multi_class": "one_vs_rest",
+        "n_jobs": 1
+      },
+      "scaler": {
+        "class": "StandardScaler",
+        "copy": true,
+        "with_mean": true,
+        "with_std": true
+      },
+      "train_dtype_override": null,
+      "kernel": {
+        "product": [
+          {
+            "class": "ConstantKernel",
+            "constant_value": 1.0,
+            "constant_value_bounds": "fixed"
+          },
+          {
+            "class": "RBF",
+            "length_scale": "sqrt(input_width) * length_multiplier",
+            "length_scale_bounds": "fixed"
+          }
+        ],
+        "length_multiplier": 1.0
+      }
+    }
+  },
+  "runtime": {
+    "python": "3.11.18",
+    "platform": "Linux x86_64",
+    "device": "CPU",
+    "versions": {
+      "numpy": "2.2.6",
+      "scipy": "1.15.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.6.1",
+      "torch": "2.7.1+cu126",
+      "cebra": "0.6.1"
+    },
+    "groups": {
+      "optuna": {
+        "status": "complete",
+        "pins": [
+          "optuna==4.5.0",
+          "alembic==1.16.5",
+          "sqlalchemy==2.0.43",
+          "colorlog==6.9.0",
+          "Mako==1.3.10",
+          "greenlet==3.2.4",
+          "PyYAML==6.0.2"
+        ],
+        "versions": {
+          "optuna": "4.5.0"
+        }
+      },
+      "aeon": {
+        "status": "complete",
+        "pins": [
+          "aeon==1.3.0",
+          "numba==0.61.2",
+          "llvmlite==0.44.0"
+        ],
+        "versions": {
+          "aeon": "1.3.0"
+        }
+      },
+      "pyriemann": {
+        "status": "complete",
+        "pins": [
+          "pyriemann==0.8"
+        ],
+        "versions": {
+          "pyriemann": "0.8"
+        }
+      },
+      "xgboost": {
+        "status": "complete",
+        "pins": [
+          "xgboost-cpu==3.1.3"
+        ],
+        "versions": {"xgboost-cpu": "3.1.3"}
+      },
+      "lightgbm": {
+        "status": "complete",
+        "pins": [
+          "lightgbm==4.6.0"
+        ],
+        "versions": {
+          "lightgbm": "4.6.0"
+        }
+      }
+    }
+  },
+  "test_role": "previously viewed retrospective; not used for selection"
+}

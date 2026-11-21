@@ -1,0 +1,69 @@
+{
+  "id": "run-d99f49d7dfac72c9",
+  "role": "Historical validation ablation and retrospective test; separate from the final poster's fixed comparison.",
+  "source": {
+    "presentation_pdf_sha256": "cb9c079cbcc619d9929b8409656655f90d17dbfce2947e930303db7fd33fe87e",
+    "historical_manifest_sha256": "ce4e49cf5c1bf3ae462ef8bfcb9de89d655145c460407547e6ad189bb03d2052",
+    "historical_preprocess_sha256": "afec743b7dcc27662a0a7053370015f39e31a3cd5c35175d17d4b4125353677b",
+    "evidence": "../evidence/model_scores.csv",
+    "evidence_sha256": "740fb1c92a963841ad8905713210858612002847647fce3cd2e1760e8845cf47"
+  },
+  "sessions": ["080718_mitt", "081106_barat", "090212_stella", "090212_superchris", "090420_buchanan"],
+  "targets": {
+    "odor": "A–E, correct InSeq only",
+    "position": "Ordinal position 1–5, correct InSeq and correct OutSeq"
+  },
+  "preprocessing": {
+    "sample_rate_hz": 1000,
+    "split_fractions": {"train": 0.70, "validation": 0.15, "test": 0.15},
+    "split_policy": "Assign odor onset by chronological raw sample index within each session; intersect with contiguous timestamp segments. Reject windows crossing split, recording, artifact, or withdrawal boundaries.",
+    "reference_window_ms": [0, 500],
+    "cohort_policy": "Keep matched trial IDs across all windows of a target. Fit robust voltage and adjacent-jump thresholds on unique eligible training samples before filtering. Reject nonfinite samples, amplitude/jump exceedances, and flatlines across retained channels.",
+    "threshold_robust_sd": 20,
+    "flatline_min_ms": 100,
+    "notch": {"frequency_hz": 60, "q": 30, "direction": "forward-backward", "guard_samples": 2199},
+    "morlet": {"frequency_range_hz": [4, 150], "frequency_count": 12, "spacing": "geometric", "cycles": 4, "cutoff_sigma": 3, "combined_guard_samples": 2677, "amplitude": "log magnitude", "phase": ["sin", "cos"]},
+    "normalization": "For each target, session, and window, z-score voltage and log amplitude using population moments of unique matched training samples; keep phase sine and cosine unstandardized at the signal stage. Fit the readout StandardScaler separately on training trial features."
+  },
+  "windows_ms": {
+    "format": "[start, duration] relative to odor onset",
+    "anchors": [[0, 200], [0, 500]],
+    "added": [[0, 100], [100, 100], [200, 100], [300, 100], [400, 100], [100, 200], [200, 200], [300, 200]]
+  },
+  "representations": {
+    "raw": "Flatten the notched and standardized window",
+    "amp": "50 ms bin means of wavelet log amplitude",
+    "phase": "50 ms bin means of wavelet sine/cosine phase",
+    "combined": "50 ms bin means of concatenated wavelet log amplitude and sine/cosine phase",
+    "raw_binned": "50 ms bin means of notched and standardized voltage",
+    "cebra_raw": "Trial-local time contrast on notched voltage",
+    "cebra_combined": "Trial-local time contrast on concatenated log amplitude and sine/cosine phase"
+  },
+  "cebra": {
+    "architecture": "offset10-model", "architecture_challenger": "offset5-model",
+    "hidden_units": 32, "latent_dim": 8, "positive_lag_samples": 50, "batch_size": 512,
+    "updates": [1000, 5000], "seed": 42, "repeat_seeds": [43, 44],
+    "loss": "fixed cosine InfoNCE", "temperature": 1.0,
+    "optimizer": "Adam", "learning_rate": 0.0003,
+    "sampling": "Uniform trial and valid patch start for each anchor; positive is 50 samples later in the same trial; independent uniformly sampled valid patches are negatives. No receptive field crosses a trial boundary.",
+    "pooling": ["mean of all valid receptive-field centers", "separate 50 ms means by center timestamp"]
+  },
+  "decoders": {
+    "l1": {"estimator": "LogisticRegression", "solver": "saga", "penalty": "l1", "class_weight": "balanced", "max_iter": 2000, "tol": 0.001, "C": [0.001, 0.01, 0.1, 1.0, 10.0]},
+    "knn": {"estimator": "KNeighborsClassifier", "n_neighbors": 3, "metric": "cosine", "algorithm": "brute", "weights": "uniform", "n_jobs": 1}
+  },
+  "stages": [
+    {"stage": 1, "windows": "anchors", "representations": ["raw", "amp", "phase", "combined", "cebra_raw", "cebra_combined"], "decoders": ["l1", "knn"], "latent": [["mean", 1000]]},
+    {"stage": 2, "windows": "added", "representations": ["raw", "amp", "phase", "combined"], "decoders": ["l1"]},
+    {"stage": 3, "windows": "anchors", "representations": ["raw_binned", "cebra_raw", "cebra_combined"], "decoders": ["l1"], "latent": [["bin50", 1000], ["mean", 5000], ["bin50", 5000]], "finalist_seed_repeats": "Hold the selected L1 C fixed per session; use the repeat seed for both encoder and readout."},
+    {"stage": 4, "windows": "added", "representations": ["cebra_raw", "cebra_combined"], "decoders": ["l1"], "latent": [["mean", 1000]], "architecture_check": "For each target, repeat the seed-42 latent finalist with offset5; retune C on validation."}
+  ],
+  "selection": {
+    "metric": "Mean recall of the five classes within each session, then an equally weighted mean across sessions",
+    "validation_sessions": 5,
+    "hyperparameter_tie_break": "Prefer smaller C per session; ties between recipes use the lexicographic configuration key (rep, start, duration, pool, steps, arch, seed, decoder).",
+    "historical_test": "Freeze all Stage 1 anchors and one seed-42 direct and latent L1 finalist per target before scoring. Strict BA is absent where a test class is absent; four sessions contribute to the slide aggregate. Previously viewed, not used for selection.",
+    "paired_pooling_panel": "Use the same four test-eligible sessions on both splits."
+  },
+  "historical_runtime": {"device": "CUDA (RTX 4090)", "seed": 42, "numpy": "2.2.6", "scipy": "1.15.3", "scikit-learn": "1.6.1", "torch": "2.7.1+cu126", "cebra": "0.6.1"}
+}
