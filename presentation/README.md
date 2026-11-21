@@ -1,6 +1,6 @@
-# Historical presentation reproduction
+# Archived decoding experiments
 
-This companion covers the 48-page `Presentation 2 (Week 8) (1).pdf`. It is separate from the final poster’s fixed 500 ms comparison. The source PDF is not distributed here; it contains third-party illustrations. Page numbers below are physical PDF pages, including the title and appendix.
+This guide covers two studies separate from the poster’s fixed 500 ms comparison: a four-stage ablation of signal representations and time windows, and a later encoder–decoder matrix. The notebooks, protocols, and saved scores below are the entry points. No external document is needed.
 
 ## Rebuild the figures
 
@@ -13,24 +13,14 @@ uv run --locked jupyter lab
 
 Open the notebooks using the root Python 3 kernel. Keep the source notebooks output-free in Git. Derived figures and preprocessing caches belong in ignored `results/`.
 
-| PDF pages | Material | How to reproduce |
+| Analysis | Where to start | Inputs and scope |
 | --- | --- | --- |
-| 1–7, 16–20, 22, 29–31, 36–38, 48 | Rubrics, motivation, study design, schematic CEBRA/decoder method, conclusions, and timeline | Design and decoder comparison below; render the supplied PDF for original artwork and layout. Page 38 lists a proposed GRU/transfer evaluation, not a completed result of this ablation. |
-| 8–13, 15, 21 | LFP/behavior join, trial cohorts, split/purge, artifact example, normalization, Morlet features, sliding windows | [Preprocessing notebook](../notebooks/presentation_preprocessing.ipynb) and [ablation settings](configs/ablation.json). The Superchris T1 artifact panel uses trials 0 and 2; the normalization and Morlet examples use the recovered Mitt trial 0. The original normalization scaler is unknown. The measured window grid contains 100, 200, and 500 ms durations, not the illustrative 300 ms example. |
-| 14, 39–42 | Raw PSD and 60 Hz spike; weak and plateau traces; time-local amplitude, channel coverage, relative SD, and line-peak heatmaps | [Preprocessing notebook](../notebooks/presentation_preprocessing.ipynb), from authorized raw NPZ recordings. The narrow 60 Hz LFP peak is consistent with electrical interference; it is not spike-unit firing. The paired before/after notch demonstration is new and separate from the slide’s raw PSD. |
-| 23–26, 33 | Historical four-rat test anchors and finalists | [Decoding notebook](../notebooks/presentation_decoding.ipynb), from [archived score aggregates](evidence/model_scores.csv). No recordings, model fitting, or test reruns. |
-| 27–28, 32, 34–35 | Five-rat validation windows, CEBRA architecture, update and seed comparisons, paired pooling | [Decoding notebook](../notebooks/presentation_decoding.ipynb). The paired pooling panel restricts both splits to the same four rats. |
-| 43, 46 | Odor 3 delivery pulses and inter-odor dip/spike trace | [Preprocessing notebook](../notebooks/presentation_preprocessing.ipynb), recomputed from Mitt. The odor pulses are from the original source panel; the inter-odor figure uses a documented reconstruction because the original script is unavailable. |
-| 44–45, 47 | Mitt odor- and channel-aligned LFP; correctness by recorded sample time | [Brain activity notebook](../notebooks/brain_activity_eda.ipynb), adapted from the original EDA. Keep separate incorrect-condition curves. Mitt has 22 LFP channels; odors A and D have correct OutSeq trials, but no incorrect OutSeq trials. |
+| Signal preparation and feature extraction | [Preprocessing notebook](../notebooks/presentation_preprocessing.ipynb) | Align voltage and behavior to odor onset, build trial windows, reject artifacts, fit normalization on training data, and compute Morlet wavelet features. The worked examples use Superchris T1 (trials 0 and 2) and Mitt trial 0. |
+| Signal quality and 60 Hz interference | [Preprocessing notebook](../notebooks/presentation_preprocessing.ipynb) | Recompute spectra, weak/flat traces, and channel heatmaps. The 60 Hz line is consistent with electrical interference, not neuronal spike firing. The paired example shows the same training interval before and after notch filtering. |
+| Odor pulses, inter-odor transitions, and behavior | [Preprocessing notebook](../notebooks/presentation_preprocessing.ipynb) · [Brain activity notebook](../notebooks/brain_activity_eda.ipynb) | Recompute the panels from Mitt. The inter-odor panel documents its event selection and is a reconstruction. Correctness is plotted by recorded time, excluding clock gaps. |
+| Four-rat historical test and five-rat validation | [Decoding notebook](../notebooks/presentation_decoding.ipynb) · [Archived scores](evidence/model_scores.csv) | Render saved scores for direct and learned features, window lengths, pooling, and encoder settings. The paired pooling panel uses the same four rats on both splits. No recordings, fitting, or test reruns. |
 
-The preprocessing notebook expects authorized `*_lfp.npz` and `*_bvr.npz` pairs under `data/raw_data/` for all five sessions. Its first run prepares a Mitt matched-window cache. Recomputed signal figures represent the documented analysis, not pixel copies of the deck. To reproduce the exact presentation layout with a local copy of the original PDF (SHA-256 in the [ablation settings](configs/ablation.json)), render all 48 pages with Poppler:
-
-```bash
-mkdir -p results/presentation-slides
-pdftoppm -r 144 -png 'Presentation 2 (Week 8) (1).pdf' results/presentation-slides/slide
-```
-
-The archive aggregate regenerated byte-for-byte; all 80 validation heatmap cells match the PDF at displayed precision. The 245 archived historical test scores were cross-checked against saved predictions without refitting or applying any model to the test split.
+For signal figures, put authorized `*_lfp.npz` and `*_bvr.npz` pairs for all five sessions under `data/raw_data/`. The first run prepares a Mitt matched-window cache. The notebook states the methods used for each figure, including any reconstructed examples.
 
 ## Historical ablation: independently implement the recipe
 
@@ -57,7 +47,7 @@ flowchart LR
 | 3 | Both anchors | Binned voltage; CEBRA mean vs 50 ms bins, 1,000 vs 5,000 updates, finalist seeds |
 | 4 | Added windows and fixed finalist windows | Raw/wavelet CEBRA at added windows; offset5 vs offset10 at each finalist window |
 
-The recovered run `run-d99f49d7dfac72c9` matches the plotted model scores at displayed precision. No receipt explicitly links the PDF export to a run. The aggregate file contains equal-session means, no trial-level records. Anyone with the authorized archive can regenerate it from the pinned validation and historical test **score tables**, without any training or test access:
+The recovered run `run-d99f49d7dfac72c9` is the source of the checked-in aggregate. Its 245 historical test scores were checked against saved predictions without refitting or running a model on test data. The aggregate contains equal-session means, not trial-level records. Anyone with the authorized archive can regenerate it from the pinned validation and historical test **score tables**:
 
 ```bash
 PYTHONPATH=src uv run --locked python -B -m evaluation.presentation_scores \
@@ -67,7 +57,7 @@ cmp results/presentation-model-scores.csv presentation/evidence/model_scores.csv
 
 ## Later encoder–decoder matrix
 
-This later 500 ms experiment is not the deck’s four-stage ablation. The [matrix protocol](configs/encoder_decoder_matrix.json) records eligible encoder/head combinations, feature construction, estimator defaults, Optuna budgets and seed rules, software versions, and promotion criteria. [Frozen settings](configs/encoder_decoder_selection.json) record the selected head knobs and actual encoder/head seed coverage by pair. The [matrix results](../poster/evidence/matrix.csv) and the [poster notebook](../notebooks/poster_results.ipynb) report outcomes; unscheduled combinations are not failures or zero scores.
+This later 500 ms experiment is separate from the four-stage ablation. The [matrix protocol](configs/encoder_decoder_matrix.json) records eligible encoder/head combinations, feature construction, estimator defaults, Optuna budgets and seed rules, software versions, and promotion criteria. [Frozen settings](configs/encoder_decoder_selection.json) record the selected head settings and actual encoder/head seed coverage by pair. The [matrix results](../poster/evidence/matrix.csv) and the [poster notebook](../notebooks/poster_results.ipynb) report outcomes; unscheduled combinations are not failures or zero scores.
 
 ```mermaid
 flowchart LR

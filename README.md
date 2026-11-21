@@ -1,6 +1,6 @@
 # Hippocampal Representation Learning
 
-Reproduce the poster figures and explore how hippocampal local field potentials (LFPs) encode **odor** and **position** in five rats.
+This project asks whether hippocampal local field potentials (LFPs) can predict which odor a rat smelled and where it appeared in a learned sequence. It compares direct wavelet features with learned representations across five rats. The repository contains the methods, reviewed results, and figure-building workflows; no slide deck is required.
 
 ## Start here
 
@@ -9,7 +9,7 @@ Reproduce the poster figures and explore how hippocampal local field potentials 
 | View or rebuild the final poster results | [Quick start](#1-poster-rebuild-from-reviewed-aggregates) · [Poster notebook](notebooks/poster_results.ipynb) | Python 3.11 and uv; no recordings or checkpoints |
 | Build the landscape poster or inspect its all-rat interpretation | [Poster layout and evidence map](poster/README.md) · [Interpretation notebook](notebooks/poster_interpretation.ipynb) | Checked-in aggregates; Chromium for PDF export |
 | Put the poster materials in Deepnote or Jupyter | [Standalone `poster.ipynb`](notebooks/poster.ipynb) · [Upload instructions](poster/README.md#deepnote-working-notebook) | NumPy, pandas, SciPy, and Plotly 6; raw recordings and print export are optional |
-| Rebuild the historical presentation plots | [Slide-by-slide guide](presentation/README.md) · [Decoding notebook](notebooks/presentation_decoding.ipynb) | The checked-in model score aggregates |
+| Explore the archived decoding comparisons | [Experiment guide](presentation/README.md) · [Decoding notebook](notebooks/presentation_decoding.ipynb) | The checked-in model score aggregates |
 | Explore the recordings or regenerate preprocessing figures | [Exploratory notebooks](#exploratory-notebooks) | Authorized raw recordings |
 | Recompute the fixed poster comparison from source data | [Private scientific replay](#private-scientific-replay) | Authorized recordings and frozen CEBRA checkpoints; Linux x86_64 |
 | Inspect the historical experiment settings | [Ablation protocol](presentation/configs/ablation.json) · [Encoder–decoder matrix protocol](presentation/configs/encoder_decoder_matrix.json) | Nothing to install; the search and ablation runners are not included |
@@ -56,21 +56,21 @@ uv run --locked --group replay --python 3.11.18 python -B -m evaluation.replay v
 
 Use a fresh output directory. The full run checks exact validation parity before scoring the previously viewed test; `verify` checks a completed replay without reopening raw recordings or fitting models. For weights, masking, and latent projection only, add `--interpretability-only` to `run` and skip the full-receipt `verify` command.
 
-## Historical presentation and experiment protocols
+## Archived decoding experiments
 
-The [presentation guide](presentation/README.md) maps each slide to the relevant notebook, evidence, or method and identifies which signal panels are reconstructions. Start with the [historical model comparisons](notebooks/presentation_decoding.ipynb) for L1, 3-NN, sliding windows, and CEBRA settings. For the separate, later encoder–decoder experiment, see the [matrix results](poster/evidence/matrix.csv) and [frozen decoder settings](presentation/configs/encoder_decoder_selection.json). These are saved results, not new test runs.
+The [experiment guide](presentation/README.md) explains the four-stage ablation and the separate, later encoder–decoder matrix. For the ablation results, open the [decoding notebook](notebooks/presentation_decoding.ipynb) to compare decoders, time windows, and CEBRA settings. For the later experiment, see the [matrix results](poster/evidence/matrix.csv) and [frozen decoder settings](presentation/configs/encoder_decoder_selection.json). These are saved results, not new test runs.
 
 ## Repository layout
 
 | Location | Contents |
 | --- | --- |
 | [`poster/`](poster/) | Reviewed evidence, replay pins, all-rat interpretation, and landscape poster guide |
-| [`presentation/`](presentation/) | Historical slide map, compact model evidence, and declarative experiment settings |
+| [`presentation/`](presentation/) | Archived decoding scores, experiment protocols, and reproduction guide |
 | [`src/data_processing/`](src/data_processing/) | Recording reads, behavior alignment, signal quality checks, filtering, and saved intermediates |
 | [`src/modeling/`](src/modeling/) | Amplitude features, frozen CEBRA inference, and training-only sparse logistic regression |
 | [`src/evaluation/`](src/evaluation/) | Scores, actual versus usual position counts, interpretation, rendering, and replay |
 | [`pyproject.toml`](pyproject.toml) and [`uv.lock`](uv.lock) | One repository-wide environment; `replay` adds the Linux x86_64 scientific dependencies |
-| [`notebooks/`](notebooks/) | Poster and presentation figures, preprocessing, and exploratory recording analyses |
+| [`notebooks/`](notebooks/) | Poster figures, archived decoding results, preprocessing, and exploratory recording analyses |
 | [`tests/`](tests/) | Evidence integrity and scientific replay gate tests |
 | `results/` | Ignored local output; not part of the release |
 
@@ -84,7 +84,7 @@ Launch JupyterLab as above. Place authorized `*_lfp.npz` and `*_bvr.npz` pairs u
 | --- | --- | --- |
 | [Dataset overview](notebooks/dataset_eda.ipynb) | Channels, behavioral markers, and timestamp gaps | Mitt |
 | [Brain activity](notebooks/brain_activity_eda.ipynb) | Poke-aligned LFP by odor and channel; accuracy by recorded sample time. Set `pool_incorrect = True` for the pooled view. | Mitt |
-| [Presentation preprocessing](notebooks/presentation_preprocessing.ipynb) | Trial alignment and rejection, normalization, 60 Hz PSD and notch, wavelet and signal-quality heatmaps | All five rats |
+| [Recording preprocessing](notebooks/presentation_preprocessing.ipynb) | Trial alignment and rejection, normalization, 60 Hz spectrum and notch filter, wavelet and signal-quality heatmaps | All five rats |
 
 For the [raw-versus-epoched audit](src/data_processing/audit_recordings.py), place both recording formats under `data/raw_data/` and `data/epoched_data/`, respectively. Run `PYTHONPATH=src uv run --locked python -B -m data_processing.audit_recordings`; outputs go to `results/recording-audit/`.
 

@@ -1,6 +1,6 @@
 # Landscape poster guide
 
-The **wireframe** shows which evidence belongs in each panel. The **results** version fills the same layout with reviewed scores and a separate all-rat validation interpretation. Both are standalone HTML and single-page **A3 landscape** PDFs. The detailed [poster results notebook](../notebooks/poster_results.ipynb) remains the reference for the full reviewed comparison; the [historical presentation](../presentation/README.md) is a separate reproduction track.
+The **wireframe** shows which evidence belongs in each panel. The **results** version fills the same layout with reviewed scores and a separate all-rat validation interpretation. Both are standalone HTML and single-page **A3 landscape** PDFs. The [poster results notebook](../notebooks/poster_results.ipynb) covers the full reviewed comparison. The [archived decoding experiments](../presentation/README.md) are a separate analysis.
 
 The study design sits at left, the test comparison and its limits anchor the center, and interpretation sits at right. The printed poster shows the clearest masking comparison; the HTML supplement preserves every group and all ten CEBRA-Time panels. The hierarchy and figure labels follow [MIT Communication Lab's poster guidance](https://mitcommlab.mit.edu/aeroastro/commkit/research-posters/) and [figure guidance](https://mitcommlab.mit.edu/aeroastro/commkit/figure-design/), and the focus on a single takeaway follows [Erren and Bourne's poster recommendations](https://doi.org/10.1371/journal.pcbi.0030102).
 
@@ -18,7 +18,7 @@ Outputs: `results/poster-landscape/poster-{wireframe,results}.{html,pdf}`. HTML 
 
 Upload [`poster.ipynb`](../notebooks/poster.ipynb) beside a folder named `poster/` containing the authorized session directories and raw NPZ files. For the data upload, use the contents of `data/raw_data/`, not this evidence directory. The notebook is standalone and starts with a plain-language guide; Section 08 maps each poster panel to its output. It requires NumPy, pandas, SciPy, and Plotly 6. The reviewed aggregates are embedded; raw files are optional and only needed for the signal illustrations.
 
-The workbook uses the Week 8 presentation’s mint-and-teal theme, with white chart panels. In the masking figures, red still means performance dropped.
+The workbook uses a mint-and-teal theme with white chart panels. In the masking figures, red means performance dropped.
 
 Run all cells, then download `poster_assets.zip`. Extract the whole folder for offline interactive HTML (the figures share a JavaScript file) and the CSV tables. For SVG, PDF, and high-resolution PNG, install `kaleido>=1.1,<2` and provide Chrome as described in the first cell. The notebook does not require any other project files.
 
